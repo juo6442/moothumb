@@ -9,7 +9,7 @@ h1, h2, p {
 }
 
 h1 {
-  font-size: 6vw;
+  font-size: 7vh;
   font-weight: bold;
 }
 
@@ -54,7 +54,7 @@ input[type=text]#inlineInput {
   width: 50%;
 }
 
-input[type=text].price {
+input[type=number].price {
   width: 4em;
 }
 

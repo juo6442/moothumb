@@ -47,12 +47,12 @@
             <tbody id="priceInputTableBody">
               <tr>
                 <th><label for="purchasePrice">구매가</label></th>
-                <td><input type="text" id="purchasePrice" name="price" class="price" maxlength="4" /></td>
+                <td><input type="number" id="purchasePrice" name="price" class="price" min="0" max="2000" /></td>
               </tr>
             </tbody>
             <script>
               const tableBody = document.getElementById('priceInputTableBody');
-              const priceInputHtml = '<input type="text" name="price" class="price" maxlength="4" size="5" />';
+              const priceInputHtml = '<input type="number" name="price" class="price" min="0" max="2000" />';
 
               for (let day of ["월", "화", "수", "목", "금", "토"]) {
                 let insertedRow = tableBody.insertRow(-1);
