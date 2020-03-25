@@ -16,11 +16,11 @@ const Days = {
 };
 
 const Method = {
-    PRICE:       0, // 가격 절대값
+    PRICE:       0, // 단순 가격
     SP:          1, // 구매가 * x%
-    PRICE_DIFF:  2, // 이전 가격에서 변화 (벨)
+    PRICE_DIFF:  2, // 이전 가격 + x (벨)
     SP_DIFF:     3, // TODO: ?
-    PRICE_RATIO: 4, // 이전 가격에서 변화 (%)
+    PRICE_RATIO: 4, // 이전 가격 * x (%)
 }
 
 const WavePatternTransitionType = {
@@ -30,9 +30,9 @@ const WavePatternTransitionType = {
 };
 
 class PredictionRange {
-    constructor(min, max, tolerance = 0) {
-        this.min = min - tolerance;
-        this.max = max + tolerance;
+    constructor(min, max) {
+        this.min = this.roundMinMethod(min - this.tolerance);
+        this.max = this.roundMaxMethod(max + this.tolerance);
     }
 
     toString() {
@@ -49,6 +49,10 @@ class Transition {
 }
 
 function predict(parameters, prices) {
+    PredictionRange.prototype.roundMinMethod = parameters.roundMinMethod;
+    PredictionRange.prototype.roundMaxMethod = parameters.roundMaxMethod;
+    PredictionRange.prototype.tolerance = parameters.tolerance;
+
     return {
         wave: predictWavePattern(parameters.wave, prices),
         falling: predictFallingPattern(parameters.falling, prices),
@@ -300,7 +304,7 @@ function calcEachPrediction(prices, transitions) {
                     } else if (transitions[j].method == Method.SP_DIFF) {
                         spMin += transitions[j].min;
                         spMax += transitions[j].max;
-                        if( j == Days.MON1 ){
+                        if (j == Days.MON1) {
                             spMin += 100;
                             spMax += 100;
                             prediction[i] = new PredictionRange(
