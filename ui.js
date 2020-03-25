@@ -1,3 +1,6 @@
+const minInput = 0;
+const maxInput = 2000;
+
 function onInlinePredictionButtonClick() {
     const prices = readPricesFromInlineInput();
     if (!prices) {
@@ -38,13 +41,13 @@ function readPricesFromInlineInput() {
 }
 
 function writePricesToInlineInput(prices) {
-    let inlinePrices = (!isNaN(prices[0]) ? prices[0] : '0') + ' ';
+    let inlinePrices = (prices[0] ? prices[0] : '0') + ' ';
 
     for (let i = 1; i < prices.length; i++) {
         if (i % 2 == 0) {
             inlinePrices += '/';
         }
-        if (!isNaN(prices[i])) {
+        if (prices[i]) {
             inlinePrices += prices[i];
         }
         if (i % 2 == 0) {
@@ -57,8 +60,10 @@ function writePricesToInlineInput(prices) {
 }
 
 function readPricesFromInput() {
-    return Array.from(document.getElementsByName('price'))
-            .map(e => parseInt(e.value));
+    return Array.from(document.getElementsByName('price')).map(e => {
+        intValue = parseInt(e.value);
+        return isBetween(intValue, minInput, maxInput) ? intValue : null;
+    });
 }
 
 function writePricesToInput(prices) {
@@ -66,7 +71,7 @@ function writePricesToInput(prices) {
 
     const priceInputs = document.getElementsByName('price');
     for (i = 0; i < priceInputs.length && i < prices.length; i++) {
-        if (!isNaN(prices[i])) {
+        if (isBetween(prices[i], minInput, maxInput)) {
             priceInputs[i].value = prices[i];
         }
     }
@@ -228,4 +233,8 @@ function displayResultRow(typeName, detailedType, result, tableBody) {
     maxPriceCells.forEach(c => {
         c.className = 'maxPrice';
     });
+}
+
+function isBetween(value, min, max) {
+    return value && min <= value && value <= max;
 }
