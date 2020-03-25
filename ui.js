@@ -75,6 +75,9 @@ function writePricesToInput(prices) {
 // TODO: Implement
 function readParametersFromInput() {
     return {
+        roundMinMethod: Math.floor,
+        roundMaxMethod: Math.ceil,
+        tolerance: 0,
         wave: {
             risingTransition:             new Transition(Method.SP, 90, 140),
             twoTimesFalling1Transition:   new Transition(Method.SP, 60, 80),
