@@ -124,7 +124,6 @@ function displayResult(result) {
     if (!result) {
         return;
     }
-    console.log(result);
 
     const tableBody = document.getElementById('predictionTableBody');
     tableBody.innerHTML = '';
@@ -132,6 +131,8 @@ function displayResult(result) {
     displayFallingResult('하락형', result.falling, tableBody);
     displayNthPeriodResult('3기형', result.thirdPeriod, tableBody);
     displayNthPeriodResult('4기형', result.fourthPeriod, tableBody);
+
+    document.getElementById('predictionResult').style.display = 'block';
 }
 
 function displayWaveResult(title, result, tableBody) {
