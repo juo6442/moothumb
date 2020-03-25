@@ -36,6 +36,9 @@ class PredictionRange {
     }
 
     toString() {
+        if (this.min == this.max) {
+            return this.min;
+        }
         return this.min + '~' + this.max;
     }
 }

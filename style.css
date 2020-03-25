@@ -1,3 +1,136 @@
-#predictionResult {
+html, body {
+  margin: 0;
+  font-family: Verdana,sans-serif;
+  font-size: 15px;
+}
+
+h1, h2, p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 6vw;
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 2em;
+}
+
+section {
+  margin: 0;
+}
+
+p.tip {
+  color: gray;
+  font-size: smaller;
+}
+
+a:link, a:visited, a:hover, a:active {
+  color: black;
+}
+
+a.footerLink:link, a.footerLink:visited, a.footerLink:hover, a.footerLink:active {
+  color: gray;
+}
+
+noscript {
+  color: red;
+}
+
+input[type=button], input[type=reset] {
+  border-width: 0;
+  background-color: #52A1E9;
+  color: white;
+  padding: 0.3em 1em 0.3em 1em;
+  border-radius: 0.8em;
+}
+
+input[type=button]:active, input[type=reset]:active {
+  background-color: #3070AA;
+}
+
+table {
+  margin: 0.7em 0 0.7em 0;
+  border: 1px solid;
+  border-collapse: collapse;
+}
+
+tr {
+  white-space: nowrap;
+}
+
+th, td {
+  padding: 0.2em;
+  border: 1px solid;
+}
+
+th {
+  background-color: #eeeeee;
+}
+
+header {
+  margin: 0;
+  padding: 0.5vw 1vw 1vw 1vw;
+  background-color: #9CC851;
+  background-image:
+    radial-gradient(#A6D179 30%, transparent 0),
+    radial-gradient(#A6D179 30%, transparent 0);
+  background-position: 0 0, 20px 20px;
+  background-size: 40px 40px;
+  color: black;
+  text-shadow: 0.1em 0.1em white;
+  font-size: small;
+}
+
+header h1 {
+  color: #804E43;
+  text-shadow: 0.1em 0.1em white;
+  margin-bottom: 0.5vw;
+}
+
+header p {
+  padding-left: 0.5vw;
+}
+
+section#content {
+  padding: 2vw;
+}
+
+section#content h2 {
+  margin-bottom: 0.2em;
+}
+
+section#priceInput {
+  font-size: small;
+}
+
+section#priceInput th {
+  width: 4em;
+}
+
+section#predictionResult {
   display: none;
+  margin-top: 2vw;
+  font-size: smaller;
+}
+
+section#predictionResult td.realPrice {
+  width: 4em;
+  background-color: #eeeeee;
+}
+
+section#predictionResult td.maxPrice {
+  background-color: #F7D9D7;
+}
+
+footer {
+  padding: 0 1vw 1vw 1vw;
+  color: gray;
+  font-size: smaller;
+}
+
+footer hr {
+  border: 1px #dddddd;
+  border-style: dashed;
 }

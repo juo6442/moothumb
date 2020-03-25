@@ -14,7 +14,7 @@ function onPredictionButtonClick() {
     writePricesToInlineInput(prices);
 
     const result = predict(readParametersFromInput(), prices);
-    displayResult(result);
+    displayResult(prices, result);
 }
 
 function loadPrices() {
@@ -120,7 +120,9 @@ function readParametersFromInput() {
     };
 }
 
-function displayResult(result) {
+function displayResult(realPrices, result) {
+    displayRealPrices(realPrices);
+
     if (!result) {
         return;
     }
@@ -133,6 +135,13 @@ function displayResult(result) {
     displayNthPeriodResult('4기형', result.fourthPeriod, tableBody);
 
     document.getElementById('predictionResult').style.display = 'block';
+}
+
+function displayRealPrices(prices) {
+    const realPriceCells = document.getElementsByClassName('realPrice');
+    for (let i = 0; i < prices.length && i < realPriceCells.length; i++) {
+        realPriceCells[i].innerText = (prices[i] ? prices[i] : '-');
+    }
 }
 
 function displayWaveResult(title, result, tableBody) {
@@ -202,8 +211,21 @@ function displayResultRow(typeName, detailedType, result, tableBody) {
         typeNameCell.colSpan = 2;
     }
 
-    result.forEach(p => {
+    let maxPrice = 0;
+    let maxPriceCells;
+    for (let i = 0; i < result.length; i++) {
         let priceCell = insertedRow.insertCell(-1);
-        priceCell.innerText = p.toString();
+        priceCell.innerText = result[i].toString();
+
+        if (maxPrice < result[i].max) {
+            maxPrice = result[i].max;
+            maxPriceCells = new Array();
+        }
+        if (maxPrice == result[i].max) {
+            maxPriceCells.push(priceCell);
+        }
+    }
+    maxPriceCells.forEach(c => {
+        c.className = 'maxPrice';
     });
 }

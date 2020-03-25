@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
 
-  <title>뭇썸 - 동물의 숲 무 가격 예측기</title>
+  <title>moothumb - 동물의 숲 무 가격 예측기</title>
 
   <meta property="og:title" content="뭇썸">
   <meta property="og:description" content="동물의 숲 무 가격 예측기">
@@ -20,120 +20,119 @@
 </head>
 
 <body onload="writePricesToInput(loadPrices());">
-  <section id="header">
-    <h1>뭇썸</h1>
-    <noscript>JavaScript를 활성화해야 합니다.</noscript>
-    <p>
-      <a href="http://tobikabu.web.fc2.com/">とびカブ(ver β1.0.2)</a>의 한국어 번역본입니다.
-    </p>
-  </section>
+  <header>
+    <h1>moothumb</h1>
+    <p>동물의 숲 무 주식으로 대박을 내서 대부호가 되어봅시다! 이 페이지는 <a href="http://tobikabu.web.fc2.com/">とびカブ(ver β1.0.2)</a>의 한국어 번역본입니다.</p>
+    <noscript><p>정상적으로 페이지를 표시하려면 JavaScript를 활성화해야 합니다.</p></noscript>
+  </header>
 
-  <section id="priceInput">
-    <h2>무 값 입력</h2>
-    <form name="priceInputForm">
-      <section>
-        <label for="inlineInput">한 줄에 입력:</label><br />
-        <input type="text" id="inlineInput" name="inlineInput" />
-        <input type="button" value="예측" onClick="onInlinePredictionButtonClick()">
-        <p class="tip">예: 99 110/122 133/ 62/54 98/69 64</p>
-      </section>
-      <section>
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              <th>오전</th>
-              <th>오후</th>
-            </tr>
-          </thead>
-          <tbody id="priceInputTableBody">
-            <tr>
-              <th><label for="purchasePrice">구매가</label></th>
-              <td colspan="2"><input type="text" id="purchasePrice" name="price" /></td>
-            </tr>
-          </tbody>
-          <script>
-            const tableBody = document.getElementById('priceInputTableBody');
-            const priceInputHtml = '<input type="text" name="price" />';
+  <section id="content">
+    <section id="priceInput">
+      <h2>무 값 입력</h2>
+      <form name="priceInputForm">
+        <section>
+          <label for="inlineInput">한 줄에 입력:</label><br />
+          <input type="text" id="inlineInput" name="inlineInput" maxlength="70" size="50" />
+          <input type="button" value="예측" onClick="onInlinePredictionButtonClick()">
+          <p class="tip">예: 99 110/122 133/ 62/54 98/69 64</p>
+        </section>
+        <section>
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>오전 / 오후</th>
+              </tr>
+            </thead>
+            <tbody id="priceInputTableBody">
+              <tr>
+                <th><label for="purchasePrice">구매가</label></th>
+                <td><input type="text" id="purchasePrice" name="price" maxlength="4" size="12" /></td>
+              </tr>
+            </tbody>
+            <script>
+              const tableBody = document.getElementById('priceInputTableBody');
+              const priceInputHtml = '<input type="text" name="price" maxlength="4" size="5" />';
 
-            for (let day of ["월", "화", "수", "목", "금", "토"]) {
-              let insertedRow = tableBody.insertRow(-1);
+              for (let day of ["월", "화", "수", "목", "금", "토"]) {
+                let insertedRow = tableBody.insertRow(-1);
 
-              let headerCell = document.createElement('th');
-              headerCell.innerText = day;
-              insertedRow.appendChild(headerCell)
+                let headerCell = document.createElement('th');
+                headerCell.innerText = day;
+                insertedRow.appendChild(headerCell)
 
-              let inputCellAm = insertedRow.insertCell(-1);
-              let inputCellPm = insertedRow.insertCell(-1);
-              inputCellAm.innerHTML = priceInputHtml;
-              inputCellPm.innerHTML = priceInputHtml;
-            }
-          </script>
-        </table>
-      </section>
-      <input type="button" value="예측" onClick="onPredictionButtonClick();">
-      <input type="reset" value="리셋">
-    </form>
-  </section>
+                let inputCell = insertedRow.insertCell(-1);
+                inputCell.innerHTML = priceInputHtml + '/' + priceInputHtml;
+              }
+            </script>
+          </table>
+        </section>
+        <input type="button" value="예측" onClick="onPredictionButtonClick();">
+        <input type="reset" value="리셋">
+      </form>
+    </section>
 
-  <section id="predictionResult">
-    <h2>예측</h2>
-    <table>
-      <thead>
-        <tr>
-          <th colspan="2" rowspan="2">가능한 유형</th>
-          <th rowspan="2">구매가</th>
-          <th colspan="12">판매가 예측</th>
-        </tr>
-        <tr>
-          <th>월AM</th>
-          <th>월PM</th>
-          <th>화AM</th>
-          <th>화PM</th>
-          <th>수AM</th>
-          <th>수PM</th>
-          <th>목AM</th>
-          <th>목PM</th>
-          <th>금AM</th>
-          <th>금PM</th>
-          <th>토AM</th>
-          <th>토PM</th>
-        </tr>
-        <tr>
-          <th colspan="2">입력값</th>
-          <td class="realPrice"></td>
-          <td class="realPrice"></td>
-          <td class="realPrice"></td>
-          <td class="realPrice"></td>
-          <td class="realPrice"></td>
-          <td class="realPrice"></td>
-          <td class="realPrice"></td>
-          <td class="realPrice"></td>
-          <td class="realPrice"></td>
-          <td class="realPrice"></td>
-          <td class="realPrice"></td>
-          <td class="realPrice"></td>
-        </tr>
-      </thead>
-      <tbody id="predictionTableBody">
-      </tbody>
-    </table>
-  </section>
+    <section id="predictionResult">
+      <h2>예측 결과</h2>
+      <table>
+        <thead>
+          <tr>
+            <th colspan="2" rowspan="2">가능한 유형</th>
+            <th rowspan="2">구매가</th>
+            <th colspan="12">판매가 예측</th>
+          </tr>
+          <tr>
+            <th>월AM</th>
+            <th>월PM</th>
+            <th>화AM</th>
+            <th>화PM</th>
+            <th>수AM</th>
+            <th>수PM</th>
+            <th>목AM</th>
+            <th>목PM</th>
+            <th>금AM</th>
+            <th>금PM</th>
+            <th>토AM</th>
+            <th>토PM</th>
+          </tr>
+          <tr>
+            <th colspan="2">입력값</th>
+            <td class="realPrice"></td>
+            <td class="realPrice"></td>
+            <td class="realPrice"></td>
+            <td class="realPrice"></td>
+            <td class="realPrice"></td>
+            <td class="realPrice"></td>
+            <td class="realPrice"></td>
+            <td class="realPrice"></td>
+            <td class="realPrice"></td>
+            <td class="realPrice"></td>
+            <td class="realPrice"></td>
+            <td class="realPrice"></td>
+            <td class="realPrice"></td>
+          </tr>
+        </thead>
+        <tbody id="predictionTableBody">
+        </tbody>
+      </table>
+    </section>
 
 <!-- TODO: Add parameter inputs
-  <section id="parameterInput">
-    <h2>파라미터</h2>
-    <p class="tip">잘 모르겠다면 수정하지 마십시오.</p>
-  </section>
+    <section id="parameterInput">
+      <h2>파라미터</h2>
+      <p class="tip">잘 모르겠다면 수정하지 마십시오.</p>
+    </section>
 -->
+  </section>
 
   <footer>
+    <hr />
     <address>
-      <p>Twitter: <a href="">@juo6442</a></p>
-      <p>E-mail: <a href="mailto:juo6442@gmail.com?subject=[뭇썸 문의]">juo6442@gmail.com</a>
+      <p>Twitter: <a class="footerLink" href="https://twitter.com/juo6442">@juo6442</a></p>
+      <p>E-mail: <a class="footerLink" href="mailto:juo6442@gmail.com?subject=[뭇썸 문의]">juo6442@gmail.com</a>
     </address>
-    <p><a href="https://github.com/juo6442/moothumb">GitHub</a></p>
-    <p><a href="http://tobikabu.web.fc2.com/">とびカブ</a></p>
+    <p>Github: <a class="footerLink" href="https://github.com/juo6442/moothumb">https://github.com/juo6442/moothumb</a></p>
+    <p>とびカブ: <a class="footerLink" href="http://tobikabu.web.fc2.com/">http://tobikabu.web.fc2.com/</a></p>
   </footer>
 </body>
 
