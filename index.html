@@ -32,7 +32,7 @@
       <form name="priceInputForm">
         <section>
           <label for="inlineInput">한 줄에 입력:</label><br />
-          <input type="text" id="inlineInput" name="inlineInput" maxlength="70" size="50" />
+          <input type="text" id="inlineInput" name="inlineInput" maxlength="70" />
           <input type="button" value="예측" onClick="onInlinePredictionButtonClick()">
           <p class="tip">예: 99 110/122 133/ 62/54 98/69 64</p>
         </section>
@@ -47,12 +47,12 @@
             <tbody id="priceInputTableBody">
               <tr>
                 <th><label for="purchasePrice">구매가</label></th>
-                <td><input type="text" id="purchasePrice" name="price" maxlength="4" size="12" /></td>
+                <td><input type="text" id="purchasePrice" name="price" class="price" maxlength="4" /></td>
               </tr>
             </tbody>
             <script>
               const tableBody = document.getElementById('priceInputTableBody');
-              const priceInputHtml = '<input type="text" name="price" maxlength="4" size="5" />';
+              const priceInputHtml = '<input type="text" name="price" class="price" maxlength="4" size="5" />';
 
               for (let day of ["월", "화", "수", "목", "금", "토"]) {
                 let insertedRow = tableBody.insertRow(-1);

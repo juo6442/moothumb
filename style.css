@@ -50,6 +50,14 @@ input[type=button]:active, input[type=reset]:active {
   background-color: #3070AA;
 }
 
+input[type=text]#inlineInput {
+  width: 50%;
+}
+
+input[type=text].price {
+  width: 4em;
+}
+
 table {
   margin: 0.7em 0 0.7em 0;
   border: 1px solid;
