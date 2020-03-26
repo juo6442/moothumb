@@ -1,6 +1,11 @@
 const minInput = 0;
 const maxInput = 2000;
 
+function onBodyLoad() {
+    buildPriceInputTableBody();
+    writePricesToInput(loadPrices())
+}
+
 function onInlinePredictionButtonClick() {
     const prices = readPricesFromInlineInput();
     if (!prices) {
@@ -123,6 +128,22 @@ function readParametersFromInput() {
             hasFourthPeriodPeak: true,
         },
     };
+}
+
+function buildPriceInputTableBody() {
+    const tableBody = document.getElementById('priceInputTableBody');
+    const priceInputHtml = '<input type="number" name="price" class="price" min="' + minInput + '" max="' + maxInput + '" />';
+
+    for (let day of ["월", "화", "수", "목", "금", "토"]) {
+      let insertedRow = tableBody.insertRow(-1);
+
+      let headerCell = document.createElement('th');
+      headerCell.innerText = day;
+      insertedRow.appendChild(headerCell)
+
+      let inputCell = insertedRow.insertCell(-1);
+      inputCell.innerHTML = priceInputHtml + '/' + priceInputHtml;
+    }
 }
 
 function displayResult(realPrices, result) {
