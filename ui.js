@@ -26,6 +26,10 @@ function onPredictionButtonClick() {
 }
 
 function loadPrices() {
+    if (!localStorage.prices) {
+        return null;
+    }
+
     return localStorage.prices.split(',')
             .map(e => parseInt(e));
 }
@@ -46,6 +50,10 @@ function readPricesFromInlineInput() {
 }
 
 function writePricesToInlineInput(prices) {
+    if (!prices) {
+        return;
+    }
+
     let inlinePrices = (prices[0] ? prices[0] : '0') + ' ';
 
     for (let i = 1; i < prices.length; i++) {
@@ -66,12 +74,16 @@ function writePricesToInlineInput(prices) {
 
 function readPricesFromInput() {
     return Array.from(document.getElementsByName('price')).map(e => {
-        intValue = parseInt(e.value);
+        let intValue = parseInt(e.value);
         return isBetween(intValue, minInput, maxInput) ? intValue : null;
     });
 }
 
 function writePricesToInput(prices) {
+    if (!prices) {
+        return;
+    }
+
     document.getElementsByName('price').forEach(e => e.value = '');
 
     const priceInputs = document.getElementsByName('price');
@@ -188,7 +200,7 @@ function displayWaveResult(title, result, tableBody) {
             continue;
         }
 
-        detailedType = [...key]
+        const detailedType = [...key]
                 .reduce((acc, cur, _) => acc + transitionTypeToString(cur), '');
         displayResultRow(title, detailedType, value, tableBody);
     }
