@@ -1,9 +1,26 @@
 const minInput = 0;
 const maxInput = 2000;
 
+const waveTypeName = '파도형';
+const fallingTypeName = '하락형';
+const thirdPeriodTypeName = '3기형';
+const fourthPeriodTypeName = '4기형';
+
+const selectableDays = [
+    Days.MON1, Days.MON2,
+    Days.TUE1, Days.TUE2,
+    Days.WED1, Days.WED2,
+    Days.THU1, Days.THU2,
+    Days.FRI1, Days.FRI2,
+    Days.SAT1, Days.SAT2,
+];
+
 function onBodyLoad() {
-    buildPriceInputTableBody();
+    buildPriceInputTable();
+    buildParameterInputTable()
+
     writePricesToInput(loadPrices())
+    writePresetParametersToInput(acnlPreset);
 }
 
 function onInlinePredictionButtonClick() {
@@ -23,6 +40,19 @@ function onPredictionButtonClick() {
 
     const result = predict(readParametersFromInput(), prices);
     displayResult(prices, result);
+}
+
+function onParameterInputToggleButtonClick() {
+    parameterInputSection = document.getElementById('parameterInput');
+    if (parameterInputSection.style.display == 'block') {
+        parameterInputSection.style.display = 'none';
+    } else {
+        parameterInputSection.style.display = 'block';
+    }
+}
+
+function onParameterPresetChange() {
+    writePresetParametersToInput(getPreset(parameterPreset.value));
 }
 
 function loadPrices() {
@@ -94,67 +124,227 @@ function writePricesToInput(prices) {
     }
 }
 
-// TODO: Implement
 function readParametersFromInput() {
+    function readTransitionFromInput(inputIndex) {
+        return new Transition(
+            parseIntWithDefault(parameterInputForm.transitionMethod[inputIndex].value, -1),
+            parseIntWithDefault(parameterInputForm.transitionMin[inputIndex].value, 0),
+            parseIntWithDefault(parameterInputForm.transitionMax[inputIndex].value, 0),
+        );
+    };
+
+    function readSelectedDaysFromInput(inputGroupIndex) {
+        const offset = inputGroupIndex * selectableDays.length;
+        const selectedDays = new Array();
+        for (let i = 0; i < selectableDays.length; i++) {
+            if (parameterInputForm.transitionDay[offset + i].checked) {
+                selectedDays.push(selectableDays[i]);
+            }
+        }
+        return selectedDays;
+    }
+
     return {
-        roundMinMethod: Math.floor,
-        roundMaxMethod: Math.ceil,
-        tolerance: 0,
+        tolerance: parseIntWithDefault(parameterInputForm.tolerance.value, 0),
         wave: {
-            risingTransition:             new Transition(Method.SP, 90, 140),
-            twoTimesFalling1Transition:   new Transition(Method.SP, 60, 80),
-            twoTimesFalling2Transition:   new Transition(Method.SP_DIFF, -10, -4),
-            threeTimesFalling1Transition: new Transition(Method.SP, 60, 80),
-            threeTimesFalling2Transition: new Transition(Method.SP_DIFF, -10, -4),
-            threeTimesFalling3Transition: new Transition(Method.SP_DIFF, -10, -4),
-            twoTimesFallingStartDays:   [Days.MON1, Days.MON2, Days.TUE1, Days.TUE2, Days.WED1, Days.WED2, Days.THU1, Days.THU2, Days.FRI1, Days.FRI2, Days.SAT1],
-            threeTimesFallingStartDays: [Days.MON1, Days.MON2, Days.TUE1, Days.TUE2, Days.WED1, Days.WED2, Days.THU1, Days.THU2, Days.FRI1, Days.FRI2],
+            risingTransition:             readTransitionFromInput(0),
+            twoTimesFalling1Transition:   readTransitionFromInput(1),
+            twoTimesFalling2Transition:   readTransitionFromInput(2),
+            threeTimesFalling1Transition: readTransitionFromInput(3),
+            threeTimesFalling2Transition: readTransitionFromInput(4),
+            threeTimesFalling3Transition: readTransitionFromInput(5),
+            twoTimesFallingStartDays:     readSelectedDaysFromInput(0),
+            threeTimesFallingStartDays:   readSelectedDaysFromInput(1),
         },
         falling: {
-            mon1Transition:      new Transition(Method.SP, 85, 90),
-            otherDaysTransition: new Transition(Method.SP_DIFF, -6, -2),
+            mon1Transition:      readTransitionFromInput(6),
+            otherDaysTransition: readTransitionFromInput(7),
         },
         thirdPeriod: {
-            mon1Transition:         new Transition(Method.SP, 85, 90),
-            beforeRisingTransition: new Transition(Method.SP_DIFF, -6, -2),
-            rising1Transition:      new Transition(Method.SP, 90, 140),
-            rising2Transition:      new Transition(Method.SP, 140, 200),
-            rising3Transition:      new Transition(Method.SP, 200, 600),
-            rising4Transition:      new Transition(Method.SP, 140, 200),
-            rising5Transition:      new Transition(Method.SP, 90, 140),
-            rising6Transition:      new Transition(Method.SP, 40, 90),
-            afterRisingTransition:  new Transition(Method.SP, 40, 90),
-            risingStartDays: [Days.MON2, Days.TUE1, Days.TUE2, Days.WED1, Days.WED2, Days.THU1, Days.THU2],
+            mon1Transition:         readTransitionFromInput(8),
+            beforeRisingTransition: readTransitionFromInput(9),
+            rising1Transition:      readTransitionFromInput(10),
+            rising2Transition:      readTransitionFromInput(11),
+            rising3Transition:      readTransitionFromInput(12),
+            rising4Transition:      readTransitionFromInput(13),
+            rising5Transition:      readTransitionFromInput(14),
+            rising6Transition:      readTransitionFromInput(15),
+            afterRisingTransition:  readTransitionFromInput(16),
+            risingStartDays:        readSelectedDaysFromInput(2),
         },
         fourthPeriod: {
-            mon1Transition:         new Transition(Method.SP, 40, 90),
-            beforeRisingTransition: new Transition(Method.SP_DIFF, -6, -2),
-            rising1Transition:      new Transition(Method.SP, 90, 140),
-            rising2Transition:      new Transition(Method.SP, 90, 140),
-            rising3Transition:      new Transition(Method.SP, 140, 190),
-            rising4Transition:      new Transition(Method.SP, 140, 200),
-            rising5Transition:      new Transition(Method.SP, 140, 190),
-            rising6Transition:      new Transition(Method.SP, 40, 90),
-            afterRisingTransition:  new Transition(Method.SP_DIFF, -6, -2),
-            risingStartDays: [Days.MON1, Days.MON2, Days.TUE1, Days.TUE2, Days.WED1, Days.WED2, Days.THU1, Days.THU2],
-            hasFourthPeriodPeak: true,
+            mon1Transition:         readTransitionFromInput(17),
+            beforeRisingTransition: readTransitionFromInput(18),
+            rising1Transition:      readTransitionFromInput(19),
+            rising2Transition:      readTransitionFromInput(20),
+            rising3Transition:      readTransitionFromInput(21),
+            rising4Transition:      readTransitionFromInput(22),
+            rising5Transition:      readTransitionFromInput(23),
+            rising6Transition:      readTransitionFromInput(24),
+            afterRisingTransition:  readTransitionFromInput(25),
+            risingStartDays:        readSelectedDaysFromInput(3),
+            hasFourthPeriodPeak:    parameterInputForm.fourthPeriodPeak.checked,
         },
     };
 }
 
-function buildPriceInputTableBody() {
+function writePresetParametersToInput(preset) {
+    parameterInputForm.parameterPreset.value = preset.key;
+
+    function writeTransitionToInput(inputIndex, transition) {
+        parameterInputForm.transitionMethod[inputIndex].value = transition.method;
+        parameterInputForm.transitionMin[inputIndex].value = transition.min;
+        parameterInputForm.transitionMax[inputIndex].value = transition.max;
+    };
+
+    function writeSelectedDaysToInput(inputGroupIndex, days) {
+        function dayToOrder(day) {
+            return day - selectableDays[0];
+        };
+        const offset = inputGroupIndex * selectableDays.length;
+
+        for (let i = 0; i < selectableDays.length; i++) {
+            parameterInputForm.transitionDay[offset + i].checked = false;
+        }
+        for (let day of days) {
+            parameterInputForm.transitionDay[offset + dayToOrder(day)].checked = true;
+        }
+    }
+
+    const transitionOrder = [
+        preset.wave.risingTransition,
+        preset.wave.twoTimesFalling1Transition,
+        preset.wave.twoTimesFalling2Transition,
+        preset.wave.threeTimesFalling1Transition,
+        preset.wave.threeTimesFalling2Transition,
+        preset.wave.threeTimesFalling3Transition,
+        preset.falling.mon1Transition,
+        preset.falling.otherDaysTransition,
+        preset.thirdPeriod.mon1Transition,
+        preset.thirdPeriod.beforeRisingTransition,
+        preset.thirdPeriod.rising1Transition,
+        preset.thirdPeriod.rising2Transition,
+        preset.thirdPeriod.rising3Transition,
+        preset.thirdPeriod.rising4Transition,
+        preset.thirdPeriod.rising5Transition,
+        preset.thirdPeriod.rising6Transition,
+        preset.thirdPeriod.afterRisingTransition,
+        preset.fourthPeriod.mon1Transition,
+        preset.fourthPeriod.beforeRisingTransition,
+        preset.fourthPeriod.rising1Transition,
+        preset.fourthPeriod.rising2Transition,
+        preset.fourthPeriod.rising3Transition,
+        preset.fourthPeriod.rising4Transition,
+        preset.fourthPeriod.rising5Transition,
+        preset.fourthPeriod.rising6Transition,
+        preset.fourthPeriod.afterRisingTransition,
+    ];
+    for (let i = 0; i < transitionOrder.length; i++) {
+        writeTransitionToInput(i, transitionOrder[i]);
+    }
+
+    const selectedDaysOrder = [
+        preset.wave.twoTimesFallingStartDays,
+        preset.wave.threeTimesFallingStartDays,
+        preset.thirdPeriod.risingStartDays,
+        preset.fourthPeriod.risingStartDays,
+    ];
+    for (let i = 0; i < selectedDaysOrder.length; i++) {
+        writeSelectedDaysToInput(i, selectedDaysOrder[i]);
+    }
+
+    parameterInputForm.fourthPeriodPeak.checked = preset.fourthPeriod.hasFourthPeriodPeak;
+}
+
+function buildPriceInputTable() {
     const tableBody = document.getElementById('priceInputTableBody');
-    const priceInputHtml = '<input type="number" name="price" class="price" min="' + minInput + '" max="' + maxInput + '" />';
+    const priceInputHtml = '<input type="number" name="price" class="price" '
+            + 'min="' + minInput + '" max="' + maxInput + '">';
 
     for (let day of ["월", "화", "수", "목", "금", "토"]) {
-      let insertedRow = tableBody.insertRow(-1);
+        let insertedRow = tableBody.insertRow(-1);
 
-      let headerCell = document.createElement('th');
-      headerCell.innerText = day;
-      insertedRow.appendChild(headerCell)
+        let headerCell = document.createElement('th');
+        headerCell.innerText = day;
+        insertedRow.appendChild(headerCell)
 
-      let inputCell = insertedRow.insertCell(-1);
-      inputCell.innerHTML = priceInputHtml + '/' + priceInputHtml;
+        let inputCell = insertedRow.insertCell(-1);
+        inputCell.innerHTML = priceInputHtml + '/' + priceInputHtml;
+    }
+}
+
+function buildParameterInputTable() {
+    buildTransitionMethodInputs();
+    buildTransitionAmountInputs();
+    buildTransitionDaysInputs()
+}
+
+function buildTransitionMethodInputs() {
+    const transitionMethods = [
+        {
+            name: '가격 (벨)',
+            value: Method.PRICE,
+        },
+        {
+            name: '이번 가격 - 이전 가격 (벨)',
+            value: Method.PREV_PRICE_DIFF,
+        },
+        {
+            name: '이번 가격 / 이전 가격 (%)',
+            value: Method.PREV_PRICE_RATIO,
+        },
+        {
+            name: '이번 가격 대비 - 이전 가격 대비 (%)',
+            value: Method.PREV_PRICE_RATIO_DIFF,
+        },
+        {
+            name: '이번 가격 / 산 가격 (%)',
+            value: Method.PURCHASE_PRICE_RATIO,
+        },
+    ];
+
+    for (cell of document.getElementsByClassName('transitionMethodCell')) {
+        const transitionMethodSelect = document.createElement('select');
+        transitionMethodSelect.name = 'transitionMethod';
+        cell.appendChild(transitionMethodSelect);
+
+        for (let i = 0; i < transitionMethods.length; i++) {
+            const transitionMethodOption = document.createElement('option');
+            transitionMethodOption.innerText = transitionMethods[i].name;
+            transitionMethodOption.value = transitionMethods[i].value;
+            transitionMethodSelect.appendChild(transitionMethodOption);
+        }
+    }
+}
+
+function buildTransitionAmountInputs() {
+    const transitionAmountHtml = ''
+            + '<input type="number" name="transitionMin" class="transitionAmount">'
+            + '~'
+            + '<input type="number" name="transitionMax" class="transitionAmount">';
+
+    for (cell of document.getElementsByClassName('transitionAmountCell')) {
+        cell.innerHTML = transitionAmountHtml;
+    }
+}
+
+function buildTransitionDaysInputs() {
+    const transitionDayInputHtml = '<input type="checkbox" name="transitionDay">';
+    const days = [
+        '월AM', '월PM',
+        '화AM', '화PM',
+        '수AM', '수PM',
+        '목AM', '목PM',
+        '금AM', '금PM',
+        '토AM', '토PM',
+    ];
+
+    for (cell of document.getElementsByClassName('transitionDaysCell')) {
+        for (day of days) {
+            const dayLabel = document.createElement('label');
+            dayLabel.innerHTML = transitionDayInputHtml + day;
+            cell.appendChild(dayLabel);
+        }
     }
 }
 
@@ -167,10 +357,10 @@ function displayResult(realPrices, result) {
 
     const tableBody = document.getElementById('predictionTableBody');
     tableBody.innerHTML = '';
-    displayWaveResult('파도형', result.wave, tableBody);
-    displayFallingResult('하락형', result.falling, tableBody);
-    displayNthPeriodResult('3기형', result.thirdPeriod, tableBody);
-    displayNthPeriodResult('4기형', result.fourthPeriod, tableBody);
+    displayWaveResult(waveTypeName, result.wave, tableBody);
+    displayFallingResult(fallingTypeName, result.falling, tableBody);
+    displayNthPeriodResult(thirdPeriodTypeName, result.thirdPeriod, tableBody);
+    displayNthPeriodResult(fourthPeriodTypeName, result.fourthPeriod, tableBody);
 
     document.getElementById('predictionResult').style.display = 'block';
 }
@@ -252,20 +442,28 @@ function displayResultRow(typeName, detailedType, result, tableBody) {
     let maxPrice = 0;
     let maxPriceCells;
     for (let i = 0; i < result.length; i++) {
-        let priceCell = insertedRow.insertCell(-1);
-        priceCell.innerText = result[i].toString();
+        const priceCell = insertedRow.insertCell(-1);
+        const min = Math.floor(result[i].min);
+        const max = Math.ceil(result[i].max);
 
-        if (maxPrice < result[i].max) {
-            maxPrice = result[i].max;
+        priceCell.innerText = (min == max ? min : min + '~' + max);
+
+        if (maxPrice < max) {
+            maxPrice = max;
             maxPriceCells = new Array();
         }
-        if (maxPrice == result[i].max) {
+        if (maxPrice == max) {
             maxPriceCells.push(priceCell);
         }
     }
     maxPriceCells.forEach(c => {
         c.className = 'maxPrice';
     });
+}
+
+function parseIntWithDefault(string, defaultValue) {
+    let value = parseInt(string);
+    return value ? value : defaultValue;
 }
 
 function isBetween(value, min, max) {
