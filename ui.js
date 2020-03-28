@@ -1,6 +1,11 @@
 const minInput = 0;
 const maxInput = 2000;
 
+function onBodyLoad() {
+    buildPriceInputTableBody();
+    writePricesToInput(loadPrices())
+}
+
 function onInlinePredictionButtonClick() {
     const prices = readPricesFromInlineInput();
     if (!prices) {
@@ -21,6 +26,10 @@ function onPredictionButtonClick() {
 }
 
 function loadPrices() {
+    if (!localStorage.prices) {
+        return null;
+    }
+
     return localStorage.prices.split(',')
             .map(e => parseInt(e));
 }
@@ -41,6 +50,10 @@ function readPricesFromInlineInput() {
 }
 
 function writePricesToInlineInput(prices) {
+    if (!prices) {
+        return;
+    }
+
     let inlinePrices = (prices[0] ? prices[0] : '0') + ' ';
 
     for (let i = 1; i < prices.length; i++) {
@@ -61,12 +74,16 @@ function writePricesToInlineInput(prices) {
 
 function readPricesFromInput() {
     return Array.from(document.getElementsByName('price')).map(e => {
-        intValue = parseInt(e.value);
+        let intValue = parseInt(e.value);
         return isBetween(intValue, minInput, maxInput) ? intValue : null;
     });
 }
 
 function writePricesToInput(prices) {
+    if (!prices) {
+        return;
+    }
+
     document.getElementsByName('price').forEach(e => e.value = '');
 
     const priceInputs = document.getElementsByName('price');
@@ -125,6 +142,22 @@ function readParametersFromInput() {
     };
 }
 
+function buildPriceInputTableBody() {
+    const tableBody = document.getElementById('priceInputTableBody');
+    const priceInputHtml = '<input type="number" name="price" class="price" min="' + minInput + '" max="' + maxInput + '" />';
+
+    for (let day of ["월", "화", "수", "목", "금", "토"]) {
+      let insertedRow = tableBody.insertRow(-1);
+
+      let headerCell = document.createElement('th');
+      headerCell.innerText = day;
+      insertedRow.appendChild(headerCell)
+
+      let inputCell = insertedRow.insertCell(-1);
+      inputCell.innerHTML = priceInputHtml + '/' + priceInputHtml;
+    }
+}
+
 function displayResult(realPrices, result) {
     displayRealPrices(realPrices);
 
@@ -167,7 +200,7 @@ function displayWaveResult(title, result, tableBody) {
             continue;
         }
 
-        detailedType = [...key]
+        const detailedType = [...key]
                 .reduce((acc, cur, _) => acc + transitionTypeToString(cur), '');
         displayResultRow(title, detailedType, value, tableBody);
     }
