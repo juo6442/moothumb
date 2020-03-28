@@ -1,5 +1,7 @@
 # MooThumb
 
+https://juo6442.github.io/moothumb/
+
 ## 소개
 
 동물의 숲 무 가격을 예측해줍니다.
