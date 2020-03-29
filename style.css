@@ -38,6 +38,11 @@ noscript {
   color: red;
 }
 
+input {
+  margin: 0.1em;
+  vertical-align: middle;
+}
+
 input[type=button], input[type=reset] {
   border-width: 0;
   background-color: #52A1E9;
@@ -56,6 +61,18 @@ input[type=text]#inlineInput {
 
 input[type=number].price {
   width: 4em;
+}
+
+input[type=number].transitionAmount {
+  width: 4em;
+}
+
+input[type=radio], input[type=checkbox] {
+  margin: 0 0.3em 0.2em 0.3em;
+}
+
+label {
+  vertical-align: middle;
 }
 
 table {
@@ -130,6 +147,19 @@ section#predictionResult td.realPrice {
 
 section#predictionResult td.maxPrice {
   background-color: #F7D9D7;
+}
+
+section#advancedSettings {
+  margin-top: 2vw;
+  font-size: small;
+}
+
+section#advancedSettings section#parameterInput {
+  display: none;
+}
+
+section#advancedSettings label {
+  font-size: smaller;
 }
 
 footer {

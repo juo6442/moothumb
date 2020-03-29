@@ -16,11 +16,11 @@ const Days = {
 };
 
 const Method = {
-    PRICE:       0, // 단순 가격
-    SP:          1, // 구매가 * x%
-    PRICE_DIFF:  2, // 이전 가격 + x (벨)
-    SP_DIFF:     3, // TODO: ?
-    PRICE_RATIO: 4, // 이전 가격 * x (%)
+    PRICE:                 0,
+    PREV_PRICE_DIFF:       1,
+    PREV_PRICE_RATIO:      2,
+    PREV_PRICE_RATIO_DIFF: 3,
+    PURCHASE_PRICE_RATIO:  4,
 }
 
 const WavePatternTransitionType = {
@@ -31,15 +31,8 @@ const WavePatternTransitionType = {
 
 class PredictionRange {
     constructor(min, max) {
-        this.min = this.roundMinMethod(min - this.tolerance);
-        this.max = this.roundMaxMethod(max + this.tolerance);
-    }
-
-    toString() {
-        if (this.min == this.max) {
-            return this.min;
-        }
-        return this.min + '~' + this.max;
+        this.min = min - this.tolerance;
+        this.max = max + this.tolerance;
     }
 }
 
@@ -52,8 +45,6 @@ class Transition {
 }
 
 function predict(parameters, prices) {
-    PredictionRange.prototype.roundMinMethod = parameters.roundMinMethod;
-    PredictionRange.prototype.roundMaxMethod = parameters.roundMaxMethod;
     PredictionRange.prototype.tolerance = parameters.tolerance;
 
     return {
@@ -79,7 +70,7 @@ function predictWavePattern(parameters, prices) {
             }
 
             // Load parameters
-            const getTransitionFromDay = function(day) {
+            function getTransitionFromDay(day) {
                 switch (day) {
                     case twoTimesFallingStartDay + 0:
                         return parameters.twoTimesFalling1Transition;
@@ -95,7 +86,7 @@ function predictWavePattern(parameters, prices) {
                         return parameters.risingTransition;
                 }
             }
-            const getTypeFromDay = function(day) {
+            function getTypeFromDay(day) {
                 switch(day) {
                     case twoTimesFallingStartDay + 0:
                     case twoTimesFallingStartDay + 1:
@@ -258,14 +249,14 @@ function calcEachPrediction(prices, transitions) {
                 );
                 break;
 
-            case Method.SP:
+            case Method.PURCHASE_PRICE_RATIO:
                 prediction[i] = new PredictionRange(
                     prices[Days.SUN] * transitions[i].min / 100,
                     prices[Days.SUN] * transitions[i].max / 100,
                 );
                 break;
 
-            case Method.PRICE_DIFF:
+            case Method.PREV_PRICE_DIFF:
                 if (prices[i - 1]) {
                     prediction[i] = new PredictionRange(
                         prices[i - 1] + transitions[i].min,
@@ -279,52 +270,32 @@ function calcEachPrediction(prices, transitions) {
                 }
                 break;
 
-            // 이전가 + 구매가 * 퍼센트?
-            case Method.SP_DIFF:
-                var spMin = 0;
-                var spMax = 0;
-                for(var j = i; j >= Days.MON1; j--) {
+            case Method.PREV_PRICE_RATIO_DIFF:
+                prediction[i] = new PredictionRange(0, 0);
+                for(var j = i; j >= Days.SUN; j--) {
                     if (prices[j] && j != i) {
-                        prediction[i] = new PredictionRange(
-                            prices[j] + (prices[Days.SUN] * spMin / 100),
-                            prices[j] + (prices[Days.SUN] * spMax / 100),
-                        );
+                        prediction[i].min += prices[j];
+                        prediction[i].max += prices[j];
                         break;
-                    } else if (transitions[j].method == Method.PRICE || transitions[j].method == Method.PRICE_DIFF || transitions[j].method == Method.PRICE_RATIO) {
-                        prediction[i] = new PredictionRange(
-                            prediction[j].min + prices[Days.SUN] * spMin / 100,
-                            prediction[j].max + prices[Days.SUN] * spMax / 100,
-                        );
+                    } else if (transitions[j].method == Method.PRICE
+                            || transitions[j].method == Method.PREV_PRICE_DIFF
+                            || transitions[j].method == Method.PREV_PRICE_RATIO) {
+                        prediction[i].min += prediction[j].min;
+                        prediction[i].max += prediction[j].max;
                         break;
-                    } else if (transitions[j].method == Method.SP) {
-                        spMin += transitions[j].min;
-                        spMax += transitions[j].max;
-                        prediction[i] = new PredictionRange(
-                            prices[Days.SUN] * spMin / 100,
-                            prices[Days.SUN] * spMax / 100,
-                        );
+                    } else if (transitions[j].method == Method.PURCHASE_PRICE_RATIO) {
+                        prediction[i].min += prices[Days.SUN] * (transitions[j].min / 100);
+                        prediction[i].max += prices[Days.SUN] * (transitions[j].max / 100);
                         break;
-                    } else if (transitions[j].method == Method.SP_DIFF) {
-                        spMin += transitions[j].min;
-                        spMax += transitions[j].max;
-                        if (j == Days.MON1) {
-                            spMin += 100;
-                            spMax += 100;
-                            prediction[i] = new PredictionRange(
-                                 prices[Days.SUN] * spMin / 100 ,
-                                 prices[Days.SUN] * spMax / 100 ,
-                            );
-                            break;
-                        }
+                    } else if (transitions[j].method == Method.PREV_PRICE_RATIO_DIFF) {
+                        prediction[i].min += prices[Days.SUN] * (transitions[j].min / 100);
+                        prediction[i].max += prices[Days.SUN] * (transitions[j].max / 100);
                         continue;
-                    } else {
-                        prediction[i] = undefined;
-                        break;
                     }
                 }
                 break;
 
-            case Method.PRICE_RATIO:
+            case Method.PREV_PRICE_RATIO:
                 if (prices[i - 1]) {
                     prediction[i] = new PredictionRange(
                          prices[i - 1] * transitions[i].min / 100,
@@ -345,7 +316,7 @@ function calcEachPrediction(prices, transitions) {
         let backwardPrediction;
 
         switch (transitions[i].method){
-            case Method.PRICE_DIFF:
+            case Method.PREV_PRICE_DIFF:
                 if (prices[i]){
                     backwardPrediction = new PredictionRange(
                         prices[i] - transitions[i].max,
@@ -359,13 +330,15 @@ function calcEachPrediction(prices, transitions) {
                 }
                 break;
 
-            case Method.SP_DIFF:
+            case Method.PREV_PRICE_RATIO_DIFF:
                 var spMin = 0;
                 var spMax = 0;
-                for (var j=i;j<=Days.SAT2;j++){
-                    if (transitions[j].method == Method.PRICE || transitions[j].method == Method.SP) {
+                for (var j = i; j <= Days.SAT2; j++) {
+                    if (transitions[j].method == Method.PRICE
+                            || transitions[j].method == Method.PURCHASE_PRICE_RATIO) {
                         break;
-                    } else if (transitions[j].method == Method.PRICE_DIFF || transitions[j].method == Method.PRICE_RATIO) {
+                    } else if (transitions[j].method == Method.PREV_PRICE_DIFF
+                            || transitions[j].method == Method.PREV_PRICE_RATIO) {
                         if (prices[j - 1]) {
                             backwardPrediction = new PredictionRange(
                                  prices[j - 1] - prices[Days.SUN] * spMax / 100,
@@ -379,7 +352,7 @@ function calcEachPrediction(prices, transitions) {
                             );
                             break;
                         }
-                    } else if (transitions[j].method == Method.SP_DIFF) {
+                    } else if (transitions[j].method == Method.PREV_PRICE_RATIO_DIFF) {
                         spMin += transitions[j].min;
                         spMax += transitions[j].max;
                         if (prices[j]) {
@@ -397,7 +370,7 @@ function calcEachPrediction(prices, transitions) {
                 }
                 break;
 
-            case Method.PRICE_RATIO:
+            case Method.PREV_PRICE_RATIO:
                 if (prices[i]) {
                     backwardPrediction = new PredictionRange(
                         prices[i] * 100 / transitions[i].max,

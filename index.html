@@ -12,8 +12,9 @@
   <link rel="icon" href="favicon_196.png" sizes="196x196">
   <link rel="stylesheet" href="style.css" type="text/css">
 
-  <script src="ui.js"></script>
   <script src="predictor.js"></script>
+  <script src="presets.js"></script>
+  <script src="ui.js"></script>
 </head>
 
 <body onload="onBodyLoad();">
@@ -29,7 +30,7 @@
       <form name="priceInputForm">
         <section>
           <label for="inlineInput">한 줄에 입력:</label><br />
-          <input type="text" id="inlineInput" name="inlineInput" maxlength="70" />
+          <input type="text" id="inlineInput" name="inlineInput" maxlength="70">
           <input type="button" value="예측" onClick="onInlinePredictionButtonClick()">
           <p class="tip">예: 99 110/122 133/ 62/54 98/69 64</p>
         </section>
@@ -44,7 +45,7 @@
             <tbody id="priceInputTableBody">
               <tr>
                 <th><label for="purchasePrice">구매가</label></th>
-                <td><input type="number" id="purchasePrice" name="price" class="price" min="0" max="2000" /></td>
+                <td><input type="number" id="purchasePrice" name="price" class="price" min="0" max="2000"></td>
               </tr>
             </tbody>
           </table>
@@ -79,32 +80,218 @@
           </tr>
           <tr>
             <th colspan="2">입력값</th>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
+            <td class="realPrice" />
+            <td class="realPrice" />
+            <td class="realPrice" />
+            <td class="realPrice" />
+            <td class="realPrice" />
+            <td class="realPrice" />
+            <td class="realPrice" />
+            <td class="realPrice" />
+            <td class="realPrice" />
+            <td class="realPrice" />
+            <td class="realPrice" />
+            <td class="realPrice" />
+            <td class="realPrice" />
           </tr>
         </thead>
-        <tbody id="predictionTableBody">
-        </tbody>
+        <tbody id="predictionTableBody" />
       </table>
     </section>
 
-<!-- TODO: Add parameter inputs
-    <section id="parameterInput">
-      <h2>파라미터</h2>
-      <p class="tip">잘 모르겠다면 수정하지 마십시오.</p>
+    <section id="advancedSettings">
+      <h2>고급 설정</h2>
+      <p>
+        세부 파라미터를 조정할 수 있습니다. 잘 모르겠다면 수정하지 마십시오.
+        <input type="button" value="표시/숨기기" onClick="onParameterInputToggleButtonClick()">
+      </p>
+      <form name="parameterInputForm">
+        <section>
+          <p><label for="tolerance">오차범위: ±</label><input type="text" size="3" name="tolerance" value="0">벨</p>
+          <label for="parameterPreset">프리셋:</label>
+          <select id="parameterPreset" name="parameterPreset" onchange="onParameterPresetChange()">
+            <option value="acww">놀러오세요 동물의 숲</option>
+            <option value="accf">타운으로 놀러가요 동물의 숲</option>
+            <option value="acnl">튀어나와요 동물의 숲 ~</option>
+          </select>
+        </section>
+        <section id="parameterInput">
+          <table>
+            <thead>
+              <tr>
+                <th>유형</th>
+                <th>기간</th>
+                <th>변동방식</th>
+                <th>변동치</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th rowspan="8">파도형</th>
+                <th>상승</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>2연속 하강 시작</th>
+                <td colspan="2" class="transitionDaysCell" />
+              </tr>
+              <tr>
+                <th>2연속 하강 1기</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>2연속 하강 2기</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>3연속 하강 시작</th>
+                <td colspan="2" class="transitionDaysCell" />
+              </tr>
+              <tr>
+                <th>3연속 하강 1기</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>3연속 하강 2기</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>3연속 하강 3기</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+            </tbody>
+            <tbody>
+              <tr>
+                <th rowspan="2">하락형</th>
+                <th>월AM</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>월PM ~ 토PM</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+            </tbody>
+            <tbody>
+              <tr>
+                <th rowspan="10">3기형</th>
+                <th>월AM</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>상승 전</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>상승 시작</th>
+                <td colspan="2" class="transitionDaysCell"></td>
+              </tr>
+              <tr>
+                <th>상승 1기</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>상승 2기</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>상승 3기</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>상승 4기</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>상승 5기</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>상승 6기</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>상승 후</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+            </tbody>
+            <tbody>
+              <tr>
+                <th rowspan="11">4기형</th>
+                <th>월AM</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>상승 전</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>상승 시작</th>
+                <td colspan="2" class="transitionDaysCell"></td>
+              </tr>
+              <tr>
+                <th>상승 1기</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>상승 2기</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>상승 3기</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>상승 4기</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>상승 5기</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>상승 6기</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <th>상승 후</th>
+                <td class="transitionMethodCell" />
+                <td class="transitionAmountCell" />
+              </tr>
+              <tr>
+                <td colspan="4">
+                  <label><input type="checkbox" name="fourthPeriodPeak">상승 4기에 최대</label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </form>
     </section>
--->
   </section>
 
   <footer>
