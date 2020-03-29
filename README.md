@@ -1,4 +1,4 @@
-# MooThumb
+# moothumb
 
 https://juo6442.github.io/moothumb/
 
