@@ -23,6 +23,9 @@
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
     "babel-loader": "^8.1.0",
+    "i18next": "^19.3.4",
+    "i18next-browser-languagedetector": "^4.0.2",
+    "loc-i18next": "^0.1.4",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"
   },
