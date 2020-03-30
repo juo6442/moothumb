@@ -57,20 +57,25 @@ function onParameterInputToggleButtonClick() {
 }
 
 function onParameterPresetChange() {
-    writePresetParametersToInput(Presets.getPreset(parameterPreset.value));
+    writePresetParametersToInput(
+            Presets.getPreset(parameterInputForm.parameterPreset.value));
 }
 
 function loadPrices() {
-    if (!localStorage.prices) {
+    if (!localStorage || !localStorage.getItem('prices')) {
         return null;
     }
 
-    return localStorage.prices.split(',')
+    return localStorage.getItem('prices').split(',')
             .map(e => parseInt(e));
 }
 
 function savePrices(prices) {
-    localStorage.prices = prices;
+    if (!localStorage) {
+        return;
+    }
+
+    localStorage.setItem('prices', prices);
 }
 
 function readPricesFromInlineInput() {

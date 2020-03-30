@@ -4,7 +4,8 @@
   "description": "https://juo6442.github.io/moothumb/",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "webpack",
+    "build-dev": "webpack --mode development"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,11 @@
   },
   "homepage": "https://github.com/juo6442/moothumb#readme",
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/polyfill": "^7.8.7",
+    "@babel/preset-env": "^7.9.0",
+    "babel-loader": "^8.1.0",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"
   }
