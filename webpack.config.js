@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    entry: ['@babel/polyfill', './src/js/ui.js'],
+    entry: ['./src/js/ui.js'],
     output: {
         filename: 'index.js',
         path: path.resolve(__dirname, 'dist')
@@ -12,9 +12,6 @@ module.exports = {
             exclude: /node_modules/,
             use: {
                 loader: 'babel-loader',
-                options: {
-                    presets: ['@babel/preset-env']
-                }
             }
         }]
     }
