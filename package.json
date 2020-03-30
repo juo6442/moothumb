@@ -1,0 +1,24 @@
+{
+  "name": "moothumb",
+  "version": "1.0.0",
+  "description": "https://juo6442.github.io/moothumb/",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juo6442/moothumb.git"
+  },
+  "keywords": [],
+  "author": "juo6442",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/juo6442/moothumb/issues"
+  },
+  "homepage": "https://github.com/juo6442/moothumb#readme",
+  "devDependencies": {
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  }
+}
