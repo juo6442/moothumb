@@ -1,3 +1,8 @@
+import Presets from "./presets.js";
+import {
+    Days, WavePatternTransitionType, Transition, TransitionMethod, predict
+} from "./predictor.js";
+
 const minInput = 0;
 const maxInput = 2000;
 
@@ -20,7 +25,7 @@ function onBodyLoad() {
     buildParameterInputTable()
 
     writePricesToInput(loadPrices())
-    writePresetParametersToInput(acnlPreset);
+    writePresetParametersToInput(Presets.getPreset("acnl"));
 }
 
 function onInlinePredictionButtonClick() {
@@ -43,7 +48,7 @@ function onPredictionButtonClick() {
 }
 
 function onParameterInputToggleButtonClick() {
-    parameterInputSection = document.getElementById('parameterInput');
+    const parameterInputSection = document.getElementById('parameterInput');
     if (parameterInputSection.style.display == 'block') {
         parameterInputSection.style.display = 'none';
     } else {
@@ -52,20 +57,25 @@ function onParameterInputToggleButtonClick() {
 }
 
 function onParameterPresetChange() {
-    writePresetParametersToInput(getPreset(parameterPreset.value));
+    writePresetParametersToInput(
+            Presets.getPreset(parameterInputForm.parameterPreset.value));
 }
 
 function loadPrices() {
-    if (!localStorage.prices) {
+    if (!localStorage || !localStorage.getItem('prices')) {
         return null;
     }
 
-    return localStorage.prices.split(',')
+    return localStorage.getItem('prices').split(',')
             .map(e => parseInt(e));
 }
 
 function savePrices(prices) {
-    localStorage.prices = prices;
+    if (!localStorage) {
+        return;
+    }
+
+    localStorage.setItem('prices', prices);
 }
 
 function readPricesFromInlineInput() {
@@ -117,7 +127,7 @@ function writePricesToInput(prices) {
     document.getElementsByName('price').forEach(e => e.value = '');
 
     const priceInputs = document.getElementsByName('price');
-    for (i = 0; i < priceInputs.length && i < prices.length; i++) {
+    for (let i = 0; i < priceInputs.length && i < prices.length; i++) {
         if (isBetween(prices[i], minInput, maxInput)) {
             priceInputs[i].value = prices[i];
         }
@@ -283,27 +293,27 @@ function buildTransitionMethodInputs() {
     const transitionMethods = [
         {
             name: '가격 (벨)',
-            value: Method.PRICE,
+            value: TransitionMethod.PRICE,
         },
         {
             name: '이번 가격 - 이전 가격 (벨)',
-            value: Method.PREV_PRICE_DIFF,
+            value: TransitionMethod.PREV_PRICE_DIFF,
         },
         {
             name: '이번 가격 / 이전 가격 (%)',
-            value: Method.PREV_PRICE_RATIO,
+            value: TransitionMethod.PREV_PRICE_RATIO,
         },
         {
             name: '이번 가격 대비 - 이전 가격 대비 (%)',
-            value: Method.PREV_PRICE_RATIO_DIFF,
+            value: TransitionMethod.PREV_PRICE_RATIO_DIFF,
         },
         {
             name: '이번 가격 / 산 가격 (%)',
-            value: Method.PURCHASE_PRICE_RATIO,
+            value: TransitionMethod.PURCHASE_PRICE_RATIO,
         },
     ];
 
-    for (cell of document.getElementsByClassName('transitionMethodCell')) {
+    for (let cell of document.getElementsByClassName('transitionMethodCell')) {
         const transitionMethodSelect = document.createElement('select');
         transitionMethodSelect.name = 'transitionMethod';
         cell.appendChild(transitionMethodSelect);
@@ -323,7 +333,7 @@ function buildTransitionAmountInputs() {
             + '~'
             + '<input type="number" name="transitionMax" class="transitionAmount">';
 
-    for (cell of document.getElementsByClassName('transitionAmountCell')) {
+    for (let cell of document.getElementsByClassName('transitionAmountCell')) {
         cell.innerHTML = transitionAmountHtml;
     }
 }
@@ -339,8 +349,8 @@ function buildTransitionDaysInputs() {
         '토AM', '토PM',
     ];
 
-    for (cell of document.getElementsByClassName('transitionDaysCell')) {
-        for (day of days) {
+    for (let cell of document.getElementsByClassName('transitionDaysCell')) {
+        for (let day of days) {
             const dayLabel = document.createElement('label');
             dayLabel.innerHTML = transitionDayInputHtml + day;
             cell.appendChild(dayLabel);
@@ -380,6 +390,8 @@ function displayWaveResult(title, result, tableBody) {
             case WavePatternTransitionType.TWO_TIMES_FALLING:
             case WavePatternTransitionType.THREE_TIMES_FALLING:
                 return '↓';
+            default:
+                return '[' + type + ']';
         }
     };
 
@@ -469,3 +481,9 @@ function parseIntWithDefault(string, defaultValue) {
 function isBetween(value, min, max) {
     return value && min <= value && value <= max;
 }
+
+window.onBodyLoad = onBodyLoad;
+window.onInlinePredictionButtonClick = onInlinePredictionButtonClick;
+window.onPredictionButtonClick = onPredictionButtonClick;
+window.onParameterInputToggleButtonClick = onParameterInputToggleButtonClick;
+window.onParameterPresetChange = onParameterPresetChange;
