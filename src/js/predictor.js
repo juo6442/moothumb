@@ -38,9 +38,9 @@ const TransitionMethod = {
 }
 
 class PredictionRange {
-    constructor(min, max) {
-        this.min = min - this.tolerance;
-        this.max = max + this.tolerance;
+    constructor(min, max, tolerance=this.tolerance) {
+        this.min = min - tolerance;
+        this.max = max + tolerance;
     }
 }
 
@@ -204,6 +204,7 @@ function calcPrediction(prices, transitions) {
     prediction[Days.SUN] = new PredictionRange(
         purchasePriceMinMax[0],
         purchasePriceMinMax[1],
+        0
     );
     const pricesCopy = [...prices];
 
@@ -226,7 +227,7 @@ function calcPrediction(prices, transitions) {
 
     for (let i = Days.MON1; i < Days.length; i++) {
         if (prices[i]) {
-            prediction[i] = new PredictionRange(prices[i], prices[i]);
+            prediction[i] = new PredictionRange(prices[i], prices[i], 0);
         } else if (!prediction[i]){
             return null;
         }
@@ -396,6 +397,8 @@ function calcEachPrediction(prices, transitions) {
     }
 
     for (let i = Days.MON1; i < Days.length; i++) {
+        prediction[i].min = Math.max(1, prediction[i].min);
+
         if (!prices[i] || !prediction[i]) {
             continue;
         }
