@@ -1,7 +1,7 @@
-import Presets from "./presets.js";
+import Presets from './presets.js';
 import {
     Days, WavePatternTransitionType, Transition, TransitionMethod, predict
-} from "./predictor.js";
+} from './predictor.js';
 import { locale } from './locale.js';
 import i18next from 'i18next';
 import locI18next from 'loc-i18next';
@@ -26,7 +26,7 @@ function onBodyLoad() {
     buildParameterInputTable()
 
     writePricesToInput(loadPrices())
-    writePresetParametersToInput(Presets.getPreset("acnl"));
+    writePresetParametersToInput(Presets.getPreset('acnl'));
 }
 
 function onChangeLanguageClick(language) {

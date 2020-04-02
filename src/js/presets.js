@@ -1,9 +1,9 @@
 import {
     Days, Transition, TransitionMethod
-} from "./predictor.js";
+} from './predictor.js';
 
 const acwwPreset = {
-    key: "acww",
+    key: 'acww',
     wave: {
         risingTransition:             new Transition(TransitionMethod.PURCHASE_PRICE_RATIO, 80, 140),
         twoTimesFalling1Transition:   new Transition(TransitionMethod.PURCHASE_PRICE_RATIO, 40, 80),
@@ -45,7 +45,7 @@ const acwwPreset = {
     },
 };
 const accfPreset = {
-    key: "accf",
+    key: 'accf',
     wave: {
         risingTransition:             new Transition(TransitionMethod.PURCHASE_PRICE_RATIO,  80, 140),
         twoTimesFalling1Transition:   new Transition(TransitionMethod.PURCHASE_PRICE_RATIO,  60, 80),
@@ -87,7 +87,7 @@ const accfPreset = {
     },
 };
 const acnlPreset = {
-    key: "acnl",
+    key: 'acnl',
     wave: {
         risingTransition:             new Transition(TransitionMethod.PURCHASE_PRICE_RATIO, 90, 140),
         twoTimesFalling1Transition:   new Transition(TransitionMethod.PURCHASE_PRICE_RATIO, 60, 80),
