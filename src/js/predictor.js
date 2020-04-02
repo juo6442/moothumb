@@ -396,6 +396,8 @@ function calcEachPrediction(prices, transitions) {
     }
 
     for (let i = Days.MON1; i < Days.length; i++) {
+        prediction[i].min = Math.max(1, prediction[i].min);
+
         if (!prices[i] || !prediction[i]) {
             continue;
         }
