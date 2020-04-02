@@ -25,8 +25,8 @@ function onBodyLoad() {
     buildPriceInputTable();
     buildParameterInputTable()
 
+    writeSettingsToInput(loadSettings());
     writePricesToInput(loadPrices())
-    writePresetParametersToInput(Presets.getPreset('acnl'));
 }
 
 function onChangeLanguageClick(language) {
@@ -45,6 +45,11 @@ function onInlinePredictionButtonClick() {
 }
 
 function onPredictionButtonClick() {
+    saveSettings({
+        tolerance: parseIntWithDefault(parameterInputForm.tolerance.value, 0),
+        preset: parameterInputForm.parameterPreset.value,
+    });
+
     const prices = readPricesFromInput();
     savePrices(prices);
     writePricesToInlineInput(prices);
@@ -101,6 +106,31 @@ function savePrices(prices) {
     }
 
     localStorage.setItem('prices', prices);
+}
+
+function loadSettings() {
+    if (!localStorage || !localStorage.getItem('settings')) {
+        return null;
+    }
+
+    return JSON.parse(localStorage.getItem('settings'));
+}
+
+function saveSettings(settings) {
+    if (!localStorage) {
+        return;
+    }
+
+    localStorage.setItem('settings', JSON.stringify(settings));
+}
+
+function writeSettingsToInput(settings) {
+    if (!settings) {
+        return;
+    }
+
+    parameterInputForm.tolerance.value = settings['tolerance'];
+    writePresetParametersToInput(Presets.getPreset(settings['preset']));
 }
 
 function readPricesFromInlineInput() {
