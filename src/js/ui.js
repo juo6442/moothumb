@@ -2,14 +2,13 @@ import Presets from "./presets.js";
 import {
     Days, WavePatternTransitionType, Transition, TransitionMethod, predict
 } from "./predictor.js";
+import { locale } from './locale.js';
+import i18next from 'i18next';
+import locI18next from 'loc-i18next';
+import languageDetector from 'i18next-browser-languagedetector';
 
 const minInput = 0;
 const maxInput = 2000;
-
-const waveTypeName = '파도형';
-const fallingTypeName = '하락형';
-const thirdPeriodTypeName = '3기형';
-const fourthPeriodTypeName = '4기형';
 
 const selectableDays = [
     Days.MON1, Days.MON2,
@@ -21,11 +20,18 @@ const selectableDays = [
 ];
 
 function onBodyLoad() {
+    initTranslator();
+
     buildPriceInputTable();
     buildParameterInputTable()
 
     writePricesToInput(loadPrices())
     writePresetParametersToInput(Presets.getPreset("acnl"));
+}
+
+function onChangeLanguageClick(language) {
+    i18next.changeLanguage(language);
+    location.reload();
 }
 
 function onInlinePredictionButtonClick() {
@@ -59,6 +65,25 @@ function onParameterInputToggleButtonClick() {
 function onParameterPresetChange() {
     writePresetParametersToInput(
             Presets.getPreset(parameterInputForm.parameterPreset.value));
+}
+
+function initTranslator() {
+    i18next.use(languageDetector);
+    i18next.init({
+        fallbackLng: 'en',
+        debug: true,
+        resources: {
+            ko: locale.ko,
+            en: locale.en,
+        },
+        detection: {
+            lookupLocalStorage: 'i18nextLng',
+            caches: ['localStorage'],
+        },
+    }).then(function(_) {
+        const localize = locI18next.init(i18next);
+        localize('[data-i18n]');
+    });
 }
 
 function loadPrices() {
@@ -270,8 +295,16 @@ function buildPriceInputTable() {
     const tableBody = document.getElementById('priceInputTableBody');
     const priceInputHtml = '<input type="number" name="price" class="price" '
             + 'min="' + minInput + '" max="' + maxInput + '">';
+    const days = [
+        i18next.t('price_input_mon'),
+        i18next.t('price_input_tue'),
+        i18next.t('price_input_wed'),
+        i18next.t('price_input_thu'),
+        i18next.t('price_input_fri'),
+        i18next.t('price_input_sat'),
+    ];
 
-    for (let day of ["월", "화", "수", "목", "금", "토"]) {
+    for (let day of days) {
         let insertedRow = tableBody.insertRow(-1);
 
         let headerCell = document.createElement('th');
@@ -292,23 +325,23 @@ function buildParameterInputTable() {
 function buildTransitionMethodInputs() {
     const transitionMethods = [
         {
-            name: '가격 (벨)',
+            name: i18next.t('settings_transition_method_price'),
             value: TransitionMethod.PRICE,
         },
         {
-            name: '이번 가격 - 이전 가격 (벨)',
+            name: i18next.t('settings_transition_method_prev_price_diff'),
             value: TransitionMethod.PREV_PRICE_DIFF,
         },
         {
-            name: '이번 가격 / 이전 가격 (%)',
+            name: i18next.t('settings_transition_method_prev_price_ratio'),
             value: TransitionMethod.PREV_PRICE_RATIO,
         },
         {
-            name: '이번 가격 대비 - 이전 가격 대비 (%)',
+            name: i18next.t('settings_transition_method_prev_price_ratio_diff'),
             value: TransitionMethod.PREV_PRICE_RATIO_DIFF,
         },
         {
-            name: '이번 가격 / 산 가격 (%)',
+            name: i18next.t('settings_transition_method_purchase_price_ratio'),
             value: TransitionMethod.PURCHASE_PRICE_RATIO,
         },
     ];
@@ -341,12 +374,18 @@ function buildTransitionAmountInputs() {
 function buildTransitionDaysInputs() {
     const transitionDayInputHtml = '<input type="checkbox" name="transitionDay">';
     const days = [
-        '월AM', '월PM',
-        '화AM', '화PM',
-        '수AM', '수PM',
-        '목AM', '목PM',
-        '금AM', '금PM',
-        '토AM', '토PM',
+        i18next.t('settings_mon_am'),
+        i18next.t('settings_mon_pm'),
+        i18next.t('settings_tue_am'),
+        i18next.t('settings_tue_pm'),
+        i18next.t('settings_wed_am'),
+        i18next.t('settings_wed_pm'),
+        i18next.t('settings_thu_am'),
+        i18next.t('settings_thu_pm'),
+        i18next.t('settings_fri_am'),
+        i18next.t('settings_fri_pm'),
+        i18next.t('settings_sat_am'),
+        i18next.t('settings_sat_pm'),
     ];
 
     for (let cell of document.getElementsByClassName('transitionDaysCell')) {
@@ -367,6 +406,12 @@ function displayResult(realPrices, result) {
 
     const tableBody = document.getElementById('predictionTableBody');
     tableBody.innerHTML = '';
+
+    const waveTypeName = i18next.t('result_type_wave');
+    const fallingTypeName = i18next.t('result_type_falling');
+    const thirdPeriodTypeName = i18next.t('result_type_third_period');
+    const fourthPeriodTypeName = i18next.t('result_type_fourth_period');
+
     displayWaveResult(waveTypeName, result.wave, tableBody);
     displayFallingResult(fallingTypeName, result.falling, tableBody);
     displayNthPeriodResult(thirdPeriodTypeName, result.thirdPeriod, tableBody);
@@ -418,12 +463,18 @@ function displayFallingResult(title, result, tableBody) {
 
 function displayNthPeriodResult(title, result, tableBody) {
     const detailedTypes = [
-        '월AM변조', '월PM변조',
-        '화AM변조', '화PM변조',
-        '수AM변조', '수PM변조',
-        '목AM변조', '목PM변조',
-        '금AM변조', '금PM변조',
-        '토AM변조', '토PM변조',
+        i18next.t('result_mutate_mon_am'),
+        i18next.t('result_mutate_mon_pm'),
+        i18next.t('result_mutate_tue_am'),
+        i18next.t('result_mutate_tue_pm'),
+        i18next.t('result_mutate_wed_am'),
+        i18next.t('result_mutate_wed_pm'),
+        i18next.t('result_mutate_thu_am'),
+        i18next.t('result_mutate_thu_pm'),
+        i18next.t('result_mutate_fri_am'),
+        i18next.t('result_mutate_fri_pm'),
+        i18next.t('result_mutate_sat_am'),
+        i18next.t('result_mutate_sat_pm'),
     ];
 
     for (let i = 0; i < result.length; i++) {
@@ -487,3 +538,4 @@ window.onInlinePredictionButtonClick = onInlinePredictionButtonClick;
 window.onPredictionButtonClick = onPredictionButtonClick;
 window.onParameterInputToggleButtonClick = onParameterInputToggleButtonClick;
 window.onParameterPresetChange = onParameterPresetChange;
+window.onChangeLanguageClick = onChangeLanguageClick;
