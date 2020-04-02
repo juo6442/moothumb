@@ -7,6 +7,8 @@ import i18next from 'i18next';
 import locI18next from 'loc-i18next';
 import languageDetector from 'i18next-browser-languagedetector';
 
+const defaultPreset = 'acnl';
+
 const minInput = 0;
 const maxInput = 2000;
 
@@ -125,12 +127,11 @@ function saveSettings(settings) {
 }
 
 function writeSettingsToInput(settings) {
-    if (!settings) {
-        return;
-    }
+    parameterInputForm.tolerance.value =
+            settings && settings.tolerance ? settings.tolerance : 0;
 
-    parameterInputForm.tolerance.value = settings['tolerance'];
-    writePresetParametersToInput(Presets.getPreset(settings['preset']));
+    const preset = settings && settings.preset ? settings.preset : defaultPreset;
+    writePresetParametersToInput(Presets.getPreset(preset));
 }
 
 function readPricesFromInlineInput() {
