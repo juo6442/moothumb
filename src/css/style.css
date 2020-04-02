@@ -149,16 +149,16 @@ section#predictionResult td.maxPrice {
   background-color: #F7D9D7;
 }
 
-section#advancedSettings {
+section#settings {
   margin-top: 2vw;
   font-size: small;
 }
 
-section#advancedSettings section#parameterInput {
+section#settings section#parameterInput {
   display: none;
 }
 
-section#advancedSettings label {
+section#settings label {
   font-size: smaller;
 }
 
