@@ -42,6 +42,10 @@ class PredictionRange {
         this.min = min - tolerance;
         this.max = max + tolerance;
     }
+
+    toString() {
+        return '(' + this.min + '~' + this.max + ')';
+    }
 }
 
 function predict(parameters, prices) {
@@ -273,7 +277,7 @@ function calcEachPrediction(prices, transitions) {
 
             case TransitionMethod.PREV_PRICE_RATIO_DIFF:
                 prediction[i] = new PredictionRange(0, 0);
-                for(let j = i; j >= Days.SUN; j--) {
+                for (let j = i; j >= Days.SUN; j--) {
                     if (prices[j] && j != i) {
                         prediction[i].min += prices[j];
                         prediction[i].max += prices[j];
@@ -291,7 +295,6 @@ function calcEachPrediction(prices, transitions) {
                     } else if (transitions[j].method == TransitionMethod.PREV_PRICE_RATIO_DIFF) {
                         prediction[i].min += prices[Days.SUN] * (transitions[j].min / 100);
                         prediction[i].max += prices[Days.SUN] * (transitions[j].max / 100);
-                        continue;
                     }
                 }
                 break;
@@ -390,8 +393,8 @@ function calcEachPrediction(prices, transitions) {
             if (!prediction[i - 1]) {
                 prediction[i - 1] = new PredictionRange(backwardPrediction.min, backwardPrediction.max);
             } else {
-                prediction[i - 1].min = Math.min(prediction[i - 1].min, backwardPrediction.min);
-                prediction[i - 1].max = Math.max(prediction[i - 1].max, backwardPrediction.max);
+                prediction[i - 1].min = Math.max(prediction[i - 1].min, backwardPrediction.min);
+                prediction[i - 1].max = Math.min(prediction[i - 1].max, backwardPrediction.max);
             }
         }
     }
