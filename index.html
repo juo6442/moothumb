@@ -115,12 +115,14 @@
             <option value="acww" data-i18n="settings_preset_acww">놀러오세요 동물의 숲</option>
             <option value="accf" data-i18n="settings_preset_accf">타운으로 놀러가요 동물의 숲</option>
             <option value="acnl" data-i18n="settings_preset_acnl">튀어나와요 동물의 숲</option>
+            <option value="acnh" data-i18n="settings_preset_acnh">모여봐요 동물의 숲</option>
           </select>
+          <p id="presetTip" class="tip" data-i18n="settings_preset_acnh_tip">이 프리셋은 시험 단계입니다. 예측이 잘못되었거나 없을 경우 입력한 가격에 대해 제보를 부탁드립니다.</p>
         </section>
-        <p data-i18n="settings_description">아래에서 세부 파라미터를 조정할 수 있습니다. 잘 모르겠다면 수정하지 마십시오.</p>
-        <input type="button" value="표시/숨기기" onClick="onParameterInputToggleButtonClick()" data-i18n="[value]settings_show_hide">
         <section id="parameterInput">
-          <table>
+          <p data-i18n="settings_description">아래에서 세부 파라미터를 조정할 수 있습니다. 잘 모르겠다면 수정하지 마십시오.</p>
+          <input type="button" value="표시/숨기기" onClick="onParameterInputToggleButtonClick()" data-i18n="[value]settings_show_hide">
+          <table id="parameterInputTable">
             <thead>
               <tr>
                 <th data-i18n="settings_type">유형</th>

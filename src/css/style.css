@@ -77,7 +77,6 @@ label {
 
 table {
   margin: 0.7em 0 0.7em 0;
-  border: 1px solid;
   border-collapse: collapse;
 }
 
@@ -154,7 +153,15 @@ section#settings {
   font-size: small;
 }
 
+section#settings p#presetTip {
+  display: none;
+}
+
 section#settings section#parameterInput {
+  margin-top: 0.5em;
+}
+
+section#settings table#parameterInputTable {
   display: none;
 }
 

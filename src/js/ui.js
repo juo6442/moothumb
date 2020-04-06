@@ -7,7 +7,7 @@ import i18next from 'i18next';
 import locI18next from 'loc-i18next';
 import languageDetector from 'i18next-browser-languagedetector';
 
-const defaultPreset = 'acnl';
+const defaultPreset = 'acnh';
 
 const minInput = 0;
 const maxInput = 2000;
@@ -61,17 +61,20 @@ function onPredictionButtonClick() {
 }
 
 function onParameterInputToggleButtonClick() {
-    const parameterInputSection = document.getElementById('parameterInput');
-    if (parameterInputSection.style.display == 'block') {
-        parameterInputSection.style.display = 'none';
+    const parameterInputTable = document.getElementById('parameterInputTable');
+    if (parameterInputTable.style.display == 'block') {
+        parameterInputTable.style.display = 'none';
     } else {
-        parameterInputSection.style.display = 'block';
+        parameterInputTable.style.display = 'block';
     }
 }
 
 function onParameterPresetChange() {
-    writePresetParametersToInput(
-            Presets.getPreset(parameterInputForm.parameterPreset.value));
+    let selectedPresetKey = parameterInputForm.parameterPreset.value;
+    writePresetParametersToInput(Presets.getPreset(selectedPresetKey));
+
+    document.getElementById('presetTip').style.display =
+            selectedPresetKey == 'acnh' ? 'block' : 'none';
 }
 
 function initTranslator() {
@@ -130,8 +133,9 @@ function writeSettingsToInput(settings) {
     parameterInputForm.tolerance.value =
             settings && settings.tolerance ? settings.tolerance : 0;
 
-    const preset = settings && settings.preset ? settings.preset : defaultPreset;
-    writePresetParametersToInput(Presets.getPreset(preset));
+    parameterInputForm.parameterPreset.value =
+            settings && settings.preset ? settings.preset : defaultPreset;
+    onParameterPresetChange();
 }
 
 function readPricesFromInlineInput() {
