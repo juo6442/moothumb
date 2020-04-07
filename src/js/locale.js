@@ -214,8 +214,8 @@ export const locale = {
             'settings_transition_method_prev_price_ratio_diff': 'Current price ratio - Previous price ratio (%)',
             'settings_transition_method_purchase_price_ratio': 'Current price / Purchase price (%)',
         }
-    },  
-	cn: {
+    },    
+    cn: {
         translation: {
             'title': '动物森友会 大头菜价格预测工具',
             'header_description': '通过收购大头菜成为百万富翁吧! 本页是<a href="http://tobikabu.web.fc2.com/">とびカブ(ver β1.0.2)</a>的翻译',
