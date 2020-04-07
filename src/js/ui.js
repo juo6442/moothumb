@@ -82,6 +82,7 @@ function initTranslator() {
         resources: {
             ko: locale.ko,
             en: locale.en,
+            zhcn:locale.zhcn,
         },
         detection: {
             lookupLocalStorage: 'i18nextLng',
