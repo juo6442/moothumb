@@ -82,7 +82,7 @@ function initTranslator() {
         resources: {
             ko: locale.ko,
             en: locale.en,
-            "zh-CN": locale.zhcn,
+            'zh-CN': locale.zhcn,
         },
         detection: {
             lookupLocalStorage: 'i18nextLng',
