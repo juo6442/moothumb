@@ -82,7 +82,7 @@ function initTranslator() {
         resources: {
             ko: locale.ko,
             en: locale.en,
-            zhcn: locale.zhcn,
+            "zh-CN": locale.zhcn,
         },
         detection: {
             lookupLocalStorage: 'i18nextLng',
@@ -91,6 +91,7 @@ function initTranslator() {
     }).then(function(_) {
         const localize = locI18next.init(i18next);
         localize('[data-i18n]');
+        document.documentElement.lang = i18next.language;
     });
 }
 
