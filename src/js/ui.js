@@ -445,10 +445,14 @@ function displayResult(realPrices, result) {
     const thirdPeriodTypeName = i18next.t('result_type_third_period');
     const fourthPeriodTypeName = i18next.t('result_type_fourth_period');
 
-    displayWaveResult(waveTypeName, result.wave, tableBody);
-    displayFallingResult(fallingTypeName, result.falling, tableBody);
-    displayNthPeriodResult(thirdPeriodTypeName, result.thirdPeriod, tableBody);
-    displayNthPeriodResult(fourthPeriodTypeName, result.fourthPeriod, tableBody);
+    let count = 0;
+    count += displayWaveResult(waveTypeName, result.wave, tableBody);
+    count += displayFallingResult(fallingTypeName, result.falling, tableBody);
+    count += displayNthPeriodResult(thirdPeriodTypeName, result.thirdPeriod, tableBody);
+    count += displayNthPeriodResult(fourthPeriodTypeName, result.fourthPeriod, tableBody);
+    if (!count) {
+        displayEmptyResult(tableBody);
+    }
 
     document.getElementById('predictionResult').style.display = 'block';
 }
@@ -473,6 +477,7 @@ function displayWaveResult(title, result, tableBody) {
         }
     };
 
+    let count = 0;
     for (let eachResult of result) {
         const key = eachResult[0];
         const value = eachResult[1];
@@ -480,18 +485,21 @@ function displayWaveResult(title, result, tableBody) {
             continue;
         }
 
+        count++;
         const detailedType = [...key]
                 .reduce((acc, cur, _) => acc + transitionTypeToString(cur), '');
         displayResultRow(title, detailedType, value, tableBody);
     }
+    return count;
 }
 
 function displayFallingResult(title, result, tableBody) {
     if (!result) {
-        return;
+        return 0;
     }
 
     displayResultRow(title, null, result, tableBody);
+    return 1;
 }
 
 function displayNthPeriodResult(title, result, tableBody) {
@@ -510,14 +518,17 @@ function displayNthPeriodResult(title, result, tableBody) {
         i18next.t('result_mutate_sat_pm'),
     ];
 
+    let count = 0;
     for (let i = 0; i < result.length; i++) {
         const eachResult = result[i];
         if (!eachResult) {
             continue;
         }
 
+        count++;
         displayResultRow(title, detailedTypes[i], eachResult, tableBody);
     }
+    return count;
 }
 
 function displayResultRow(typeName, detailedType, result, tableBody) {
@@ -555,6 +566,15 @@ function displayResultRow(typeName, detailedType, result, tableBody) {
     maxPriceCells.forEach(c => {
         c.className = 'maxPrice';
     });
+}
+
+function displayEmptyResult(tableBody) {
+    let insertedRow = tableBody.insertRow(-1);
+
+    let cell = document.createElement('td');
+    cell.colSpan = 15;
+    cell.innerText = i18next.t('result_empty');
+    insertedRow.appendChild(cell);
 }
 
 function parseIntWithDefault(string, defaultValue) {
