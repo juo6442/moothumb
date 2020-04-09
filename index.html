@@ -18,299 +18,314 @@
 <body onload="onBodyLoad();">
   <header>
     <h1>moothumb</h1>
-    <p data-i18n="[html]header_description">동물의 숲 무 주식으로 대박을 내서 대부호가 되어봅시다! 이 페이지는 <a href="http://tobikabu.web.fc2.com/">とびカブ(ver β1.0.2)</a>의 한국어 번역본입니다.</p>
+    <p data-i18n="[html]header_description">동물의 숲 무 주식으로 대박을 내서 대부호가 되어봅시다! 이 페이지는 <a
+        href="http://tobikabu.web.fc2.com/">とびカブ(ver β1.0.2)</a>의 한국어 번역본입니다.</p>
+    <br>
     <p>
       <a href="javascript:onChangeLanguageClick('ko')">한국어</a>
       <a href="javascript:onChangeLanguageClick('en')">English</a>
       <a href="javascript:onChangeLanguageClick('zh-CN')">简体中文</a>
     </p>
-    <noscript><p data-i18n="header_noscript">정상적으로 페이지를 표시하려면 JavaScript를 활성화해야 합니다.</p></noscript>
+    <noscript>
+      <p data-i18n="header_noscript">정상적으로 페이지를 표시하려면 JavaScript를 활성화해야 합니다.</p>
+    </noscript>
   </header>
+  <container>
+    <section id="content">
+      <section id="priceInput">
+        <h2 data-i18n="price_input_title">무 값 입력</h2>
+        <form name="priceInputForm">
+          <section>
+            <label for="inlineInput" data-i18n="price_input_inline">한 줄에 입력:</label>
+            <input type="text" id="inlineInput" name="inlineInput" maxlength="70">
+            <input type="button" value="예측" onClick="onInlinePredictionButtonClick()"
+              data-i18n="[value]price_input_predict">
+            <p class="tip" data-i18n="price_input_inline_example">예: 99 110/122 133/ 62/54 98/69 64</p>
+          </section>
+          <br>
+          <section>
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th data-i18n="price_input_am_pm">오전 / 오후</th>
+                </tr>
+              </thead>
+              <tbody id="priceInputTableBody">
+                <tr>
+                  <th><label for="purchasePrice" data-i18n="price_input_purchase_price">구매가</label></th>
+                  <td><input type="number" id="purchasePrice" name="price" class="price" min="0" max="2000"></td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <input type="button" value="예측" onClick="onPredictionButtonClick();"
+            data-i18n="[value]price_input_predict"><br>
+          <input type="reset" value="리셋" data-i18n="[value]price_input_reset">
+        </form>
+      </section>
 
-  <section id="content">
-    <section id="priceInput">
-      <h2 data-i18n="price_input_title">무 값 입력</h2>
-      <form name="priceInputForm">
-        <section>
-          <label for="inlineInput" data-i18n="price_input_inline">한 줄에 입력:</label><br />
-          <input type="text" id="inlineInput" name="inlineInput" maxlength="70">
-          <input type="button" value="예측" onClick="onInlinePredictionButtonClick()" data-i18n="[value]price_input_predict">
-          <p class="tip" data-i18n="price_input_inline_example">예: 99 110/122 133/ 62/54 98/69 64</p>
-        </section>
-        <section>
+      <section id="predictionResult">
+        <h2 data-i18n="result_title">예측 결과</h2>
+        <table>
+          <thead>
+            <tr>
+              <th colspan="2" rowspan="2" data-i18n="result_type">가능한 유형</th>
+              <th rowspan="2" data-i18n="result_purchase_price">구매가</th>
+              <th colspan="12" data-i18n="result_prediction">판매가 예측</th>
+            </tr>
+            <tr>
+              <th data-i18n="result_mon_am">월AM</th>
+              <th data-i18n="result_mon_pm">월PM</th>
+              <th data-i18n="result_tue_am">화AM</th>
+              <th data-i18n="result_tue_pm">화PM</th>
+              <th data-i18n="result_wed_am">수AM</th>
+              <th data-i18n="result_wed_pm">수PM</th>
+              <th data-i18n="result_thu_am">목AM</th>
+              <th data-i18n="result_thu_pm">목PM</th>
+              <th data-i18n="result_fri_am">금AM</th>
+              <th data-i18n="result_fri_pm">금PM</th>
+              <th data-i18n="result_sat_am">토AM</th>
+              <th data-i18n="result_sat_pm">토PM</th>
+            </tr>
+            <tr>
+              <th colspan="2" data-i18n="result_input_value">입력값</th>
+              <td class="realPrice"></td>
+              <td class="realPrice"></td>
+              <td class="realPrice"></td>
+              <td class="realPrice"></td>
+              <td class="realPrice"></td>
+              <td class="realPrice"></td>
+              <td class="realPrice"></td>
+              <td class="realPrice"></td>
+              <td class="realPrice"></td>
+              <td class="realPrice"></td>
+              <td class="realPrice"></td>
+              <td class="realPrice"></td>
+              <td class="realPrice"></td>
+            </tr>
+          </thead>
+          <tbody id="predictionTableBody"></tbody>
+        </table>
+      </section>
+
+      <section id="settings">
+        <h2 data-i18n="settings_title">설정</h2>
+        <form name="parameterInputForm">
           <table>
-            <thead>
-              <tr>
-                <th></th>
-                <th data-i18n="price_input_am_pm">오전 / 오후</th>
-              </tr>
-            </thead>
-            <tbody id="priceInputTableBody">
-              <tr>
-                <th><label for="purchasePrice" data-i18n="price_input_purchase_price">구매가</label></th>
-                <td><input type="number" id="purchasePrice" name="price" class="price" min="0" max="2000"></td>
-              </tr>
-            </tbody>
+            <tr>
+              <th for="tolerance" data-i18n="settings_tolerance">오차범위: ±</td>
+              <td> <input type="text" class='bell' size="3" name="tolerance" value="0"><span
+                  data-i18n="settings_tolerance_unit_bell">벨</span></td>
+            </tr>
+            <tr>
+              <th for="parameterPreset" data-i18n="settings_preset">프리셋:</td>
+              <td>
+                <select id="parameterPreset" name="parameterPreset" onchange="onParameterPresetChange()">
+                  <option value="acww" data-i18n="settings_preset_acww">놀러오세요 동물의 숲</option>
+                  <option value="accf" data-i18n="settings_preset_accf">타운으로 놀러가요 동물의 숲</option>
+                  <option value="acnl" data-i18n="settings_preset_acnl">튀어나와요 동물의 숲</option>
+              </td>
+            </tr>
           </table>
-        </section>
-        <input type="button" value="예측" onClick="onPredictionButtonClick();" data-i18n="[value]price_input_predict">
-        <input type="reset" value="리셋" data-i18n="[value]price_input_reset">
-      </form>
+          <br>
+          <p data-i18n="settings_description">아래에서 세부 파라미터를 조정할 수 있습니다. 잘 모르겠다면 수정하지 마십시오.</p>
+          <br>
+          <input type="button" value="표시/숨기기" onClick="onParameterInputToggleButtonClick()"
+            data-i18n="[value]settings_show_hide">
+          <section id="parameterInput">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="settings_type">유형</th>
+                  <th data-i18n="settings_period">기간</th>
+                  <th data-i18n="settings_transition">변동방식</th>
+                  <th data-i18n="settings_transition_amount">변동치</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th rowspan="8" data-i18n="settings_wave">파도형</th>
+                  <th data-i18n="settings_rising">상승</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_rising_two_consecutive_falling_start">2연속 하강 시작</th>
+                  <td colspan="2" class="transitionDaysCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_rising_two_consecutive_falling_1">2연속 하강 1기</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_rising_two_consecutive_falling_2">2연속 하강 2기</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_rising_three_consecutive_falling_start">3연속 하강 시작</th>
+                  <td colspan="2" class="transitionDaysCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_rising_settings_three_consecutive_falling_1">3연속 하강 1기</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_rising_settings_three_consecutive_falling_2">3연속 하강 2기</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_rising_settings_three_consecutive_falling_3">3연속 하강 3기</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+              </tbody>
+              <tbody>
+                <tr>
+                  <th rowspan="2" data-i18n="settings_falling">하락형</th>
+                  <th data-i18n="settings_falling_mon_am">월AM</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_falling_mon_am_to_sat_pm">월PM ~ 토PM</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+              </tbody>
+              <tbody>
+                <tr>
+                  <th rowspan="10" data-i18n="settings_third_period">3기형</th>
+                  <th data-i18n="settings_nth_period_mon_am">월AM</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_before">상승 전</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_start">상승 시작</th>
+                  <td colspan="2" class="transitionDaysCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_1">상승 1기</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_2">상승 2기</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_3">상승 3기</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_4">상승 4기</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_5">상승 5기</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_6">상승 6기</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_after">상승 후</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+              </tbody>
+              <tbody>
+                <tr>
+                  <th rowspan="11" data-i18n="settings_fourth_period">4기형</th>
+                  <th data-i18n="settings_nth_period_mon_am">월AM</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_before">상승 전</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_start">상승 시작</th>
+                  <td colspan="2" class="transitionDaysCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_1">상승 1기</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_2">상승 2기</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_3">상승 3기</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_4">상승 4기</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_5">상승 5기</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_6">상승 6기</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <th data-i18n="settings_nth_period_rising_after">상승 후</th>
+                  <td class="transitionMethodCell"></td>
+                  <td class="transitionAmountCell"></td>
+                </tr>
+                <tr>
+                  <td colspan="4">
+                    <label>
+                      <input type="checkbox" name="fourthPeriodPeak">
+                      <span data-i18n="settings_fourth_period_peak">상승 4기에 최대</span>
+                    </label>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </form>
+      </section>
     </section>
-
-    <section id="predictionResult">
-      <h2 data-i18n="result_title">예측 결과</h2>
-      <table>
-        <thead>
-          <tr>
-            <th colspan="2" rowspan="2" data-i18n="result_type">가능한 유형</th>
-            <th rowspan="2" data-i18n="result_purchase_price">구매가</th>
-            <th colspan="12" data-i18n="result_prediction">판매가 예측</th>
-          </tr>
-          <tr>
-            <th data-i18n="result_mon_am">월AM</th>
-            <th data-i18n="result_mon_pm">월PM</th>
-            <th data-i18n="result_tue_am">화AM</th>
-            <th data-i18n="result_tue_pm">화PM</th>
-            <th data-i18n="result_wed_am">수AM</th>
-            <th data-i18n="result_wed_pm">수PM</th>
-            <th data-i18n="result_thu_am">목AM</th>
-            <th data-i18n="result_thu_pm">목PM</th>
-            <th data-i18n="result_fri_am">금AM</th>
-            <th data-i18n="result_fri_pm">금PM</th>
-            <th data-i18n="result_sat_am">토AM</th>
-            <th data-i18n="result_sat_pm">토PM</th>
-          </tr>
-          <tr>
-            <th colspan="2" data-i18n="result_input_value">입력값</th>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-            <td class="realPrice"></td>
-          </tr>
-        </thead>
-        <tbody id="predictionTableBody"></tbody>
-      </table>
-    </section>
-
-    <section id="settings">
-      <h2 data-i18n="settings_title">설정</h2>
-      <form name="parameterInputForm">
-        <section>
-          <p>
-            <label for="tolerance" data-i18n="settings_tolerance">오차범위: ±</label>
-            <input type="text" size="3" name="tolerance" value="0">
-            <span data-i18n="settings_tolerance_unit_bell">벨</span>
-          </p>
-          <label for="parameterPreset" data-i18n="settings_preset">프리셋:</label>
-          <select id="parameterPreset" name="parameterPreset" onchange="onParameterPresetChange()">
-            <option value="acww" data-i18n="settings_preset_acww">놀러오세요 동물의 숲</option>
-            <option value="accf" data-i18n="settings_preset_accf">타운으로 놀러가요 동물의 숲</option>
-            <option value="acnl" data-i18n="settings_preset_acnl">튀어나와요 동물의 숲</option>
-          </select>
-        </section>
-        <p data-i18n="settings_description">아래에서 세부 파라미터를 조정할 수 있습니다. 잘 모르겠다면 수정하지 마십시오.</p>
-        <input type="button" value="표시/숨기기" onClick="onParameterInputToggleButtonClick()" data-i18n="[value]settings_show_hide">
-        <section id="parameterInput">
-          <table>
-            <thead>
-              <tr>
-                <th data-i18n="settings_type">유형</th>
-                <th data-i18n="settings_period">기간</th>
-                <th data-i18n="settings_transition">변동방식</th>
-                <th data-i18n="settings_transition_amount">변동치</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th rowspan="8" data-i18n="settings_wave">파도형</th>
-                <th data-i18n="settings_rising">상승</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_rising_two_consecutive_falling_start">2연속 하강 시작</th>
-                <td colspan="2" class="transitionDaysCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_rising_two_consecutive_falling_1">2연속 하강 1기</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_rising_two_consecutive_falling_2">2연속 하강 2기</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_rising_three_consecutive_falling_start">3연속 하강 시작</th>
-                <td colspan="2" class="transitionDaysCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_rising_settings_three_consecutive_falling_1">3연속 하강 1기</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_rising_settings_three_consecutive_falling_2">3연속 하강 2기</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_rising_settings_three_consecutive_falling_3">3연속 하강 3기</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-            </tbody>
-            <tbody>
-              <tr>
-                <th rowspan="2" data-i18n="settings_falling">하락형</th>
-                <th data-i18n="settings_falling_mon_am">월AM</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_falling_mon_am_to_sat_pm">월PM ~ 토PM</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-            </tbody>
-            <tbody>
-              <tr>
-                <th rowspan="10" data-i18n="settings_third_period">3기형</th>
-                <th data-i18n="settings_nth_period_mon_am">월AM</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_before">상승 전</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_start">상승 시작</th>
-                <td colspan="2" class="transitionDaysCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_1">상승 1기</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_2">상승 2기</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_3">상승 3기</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_4">상승 4기</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_5">상승 5기</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_6">상승 6기</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_after">상승 후</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-            </tbody>
-            <tbody>
-              <tr>
-                <th rowspan="11" data-i18n="settings_fourth_period">4기형</th>
-                <th data-i18n="settings_nth_period_mon_am">월AM</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_before">상승 전</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_start">상승 시작</th>
-                <td colspan="2" class="transitionDaysCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_1">상승 1기</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_2">상승 2기</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_3">상승 3기</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_4">상승 4기</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_5">상승 5기</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_6">상승 6기</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <th data-i18n="settings_nth_period_rising_after">상승 후</th>
-                <td class="transitionMethodCell"></td>
-                <td class="transitionAmountCell"></td>
-              </tr>
-              <tr>
-                <td colspan="4">
-                  <label>
-                    <input type="checkbox" name="fourthPeriodPeak">
-                    <span data-i18n="settings_fourth_period_peak">상승 4기에 최대</span>
-                  </label>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </section>
-      </form>
-    </section>
-  </section>
-
-  <footer>
-    <hr />
-    <address>
-      <p>Twitter: <a class="footerLink" href="https://twitter.com/juo6442">@juo6442</a></p>
-      <p>E-mail: <a class="footerLink" href="mailto:juo6442@gmail.com?subject=[뭇썸 문의]">juo6442@gmail.com</a>
-    </address>
-    <p>Github: <a class="footerLink" href="https://github.com/juo6442/moothumb">https://github.com/juo6442/moothumb</a></p>
-    <p>とびカブ: <a class="footerLink" href="http://tobikabu.web.fc2.com/">http://tobikabu.web.fc2.com/</a></p>
-  </footer>
+    <footer>
+      <hr />
+      <address>
+        <p>Twitter: <a class="footerLink" href="https://twitter.com/juo6442">@juo6442</a></p>
+        <p>E-mail: <a class="footerLink" href="mailto:juo6442@gmail.com?subject=[뭇썸 문의]">juo6442@gmail.com</a>
+      </address>
+      <p>Github: <a class="footerLink"
+          href="https://github.com/juo6442/moothumb">https://github.com/juo6442/moothumb</a>
+      </p>
+      <p>とびカブ: <a class="footerLink" href="http://tobikabu.web.fc2.com/">http://tobikabu.web.fc2.com/</a></p>
+    </footer>
+  </container>
 </body>
 
 </html>

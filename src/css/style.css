@@ -1,10 +1,46 @@
-html, body {
-  margin: 0;
-  font-family: Verdana,sans-serif;
-  font-size: 15px;
+/*
+  Finkheavy Regular
+  Font form http://fontsgeek.com/fonts/FinkHeavy-Regular
+ */
+@font-face {
+  font-family: AnimalForestTitle;
+  src: url('./fonts/FinkHeavy Regular.ttf');
 }
 
-h1, h2, p {
+/*
+  a영고딕 Font
+  Font from http://www.asiafont.com/asfont/m_board.php?ps_db=sample 
+  This font can be used only for no commercial  
+  See http://www.asiafont.com/asfont/skin/mall/img/yesno.png for more detail 
+ */
+@font-face {
+  font-family: AnimalForest;
+  src: url('./fonts/Young_Gothic_Regular.woff');
+}
+
+@font-face {
+  font-family: AnimalForest;
+  src: url('./fonts/Young_Gothic_Bold.woff');
+  font-weight: bold;
+}
+
+* {
+  font-family: AnimalForest;
+  color: #837156;
+}
+
+body {
+  margin: 0;
+  font-family: Verdana, sans-serif;
+  font-size: 15px;
+  width: 480px;
+  border: 10px solid #000000;
+  border-radius: 20px;
+}
+
+h1,
+h2,
+p {
   margin: 0;
 }
 
@@ -19,6 +55,7 @@ h2 {
 
 section {
   margin: 0;
+  background-color: #fff9e4;
 }
 
 p.tip {
@@ -26,11 +63,17 @@ p.tip {
   font-size: smaller;
 }
 
-a:link, a:visited, a:hover, a:active {
+a:link,
+a:visited,
+a:hover,
+a:active {
   color: black;
 }
 
-a.footerLink:link, a.footerLink:visited, a.footerLink:hover, a.footerLink:active {
+a.footerLink:link,
+a.footerLink:visited,
+a.footerLink:hover,
+a.footerLink:active {
   color: gray;
 }
 
@@ -40,34 +83,58 @@ noscript {
 
 input {
   margin: 0.1em;
+  padding: 0.1em;
   vertical-align: middle;
+  height: 1.5em;
 }
 
-input[type=button], input[type=reset] {
+input[type=button],
+input[type=reset] {
   border-width: 0;
-  background-color: #52A1E9;
+  background-color: #0cc6b6;
   color: white;
   padding: 0.3em 1em 0.3em 1em;
   border-radius: 0.8em;
+  width: 100%;
+  height: 2em;
 }
 
-input[type=button]:active, input[type=reset]:active {
+input[type=button]:active,
+input[type=reset]:active {
   background-color: #3070AA;
 }
 
+input[type=text].bell {
+  width: 90%;
+  background-color: #feec9e;
+  border-radius: 0.8em;
+  padding-right: 15px;
+  text-align: right;
+}
+
 input[type=text]#inlineInput {
-  width: 50%;
+  width: 77%;
+  background-color: #feec9e;
+  border-radius: 0.8em;
 }
 
 input[type=number].price {
-  width: 4em;
+  width: 40%;
+  border: none;
+  background-color: #feec9e;
+  border-radius: 0.8em;
+}
+
+input[type=number].price#purchasePrice {
+  width: 80%;
 }
 
 input[type=number].transitionAmount {
   width: 4em;
 }
 
-input[type=radio], input[type=checkbox] {
+input[type=radio],
+input[type=checkbox] {
   margin: 0 0.3em 0.2em 0.3em;
 }
 
@@ -77,21 +144,27 @@ label {
 
 table {
   margin: 0.7em 0 0.7em 0;
-  border: 1px solid;
+  border: 0px solid;
   border-collapse: collapse;
+  width: 100%;
 }
 
 tr {
   white-space: nowrap;
 }
 
-th, td {
+th,
+td {
+  text-align: center;
   padding: 0.2em;
-  border: 1px solid;
+  border: 1px solid #CCCCCC;
+  background-color: #dcfff5;
 }
 
-th {
-  background-color: #eeeeee;
+th,
+th>label {
+  background-color: #66D267;
+  color: #FFFFFF;
 }
 
 header {
@@ -106,9 +179,11 @@ header {
   color: black;
   text-shadow: 0.1em 0.1em white;
   font-size: small;
+  height: 20vh;
 }
 
 header h1 {
+  font-family: AnimalForestTitle;
   color: #804E43;
   text-shadow: 0.1em 0.1em white;
   margin-bottom: 0.5vw;
@@ -116,6 +191,18 @@ header h1 {
 
 header p {
   padding-left: 0.5vw;
+}
+
+container {
+  /* width: 100vw; */
+  height: 80vh;
+}
+
+select {
+  background-color: #feec9e;
+  border-radius: 0.8em;
+  width: 100%;
+  height: 25px;
 }
 
 section#content {
@@ -156,6 +243,9 @@ section#settings {
 
 section#settings section#parameterInput {
   display: none;
+  position: absolute;
+  left: 27%;
+  top: 10%;
 }
 
 section#settings label {
@@ -163,9 +253,10 @@ section#settings label {
 }
 
 footer {
-  padding: 0 1vw 1vw 1vw;
+  padding: 0vh 1vw 1vw 1vw;
   color: gray;
   font-size: smaller;
+  background-color: #fff9e4;
 }
 
 footer hr {
