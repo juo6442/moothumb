@@ -230,10 +230,15 @@ function calcPrediction(prices, transitions) {
     }
 
     for (let i = Days.MON1; i < Days.length; i++) {
-        if (prices[i]) {
-            prediction[i] = new PredictionRange(prices[i], prices[i], 0);
-        } else if (!prediction[i]){
+        if (!prediction[i]) {
             return null;
+        }
+
+        if (prices[i]) {
+            if (!isPredictionAcceptable(prediction[i], prices[i])) {
+                return null;
+            }
+            prediction[i] = new PredictionRange(prices[i], prices[i], 0);
         }
     }
 
