@@ -162,9 +162,7 @@ function writePricesToInlineInput(prices) {
         if (i % 2 == 0) {
             inlinePrices += '/';
         }
-        if (prices[i]) {
-            inlinePrices += prices[i];
-        }
+        inlinePrices += prices[i] ? prices[i] : '-';
         if (i % 2 == 0) {
             inlinePrices += ' ';
         }
