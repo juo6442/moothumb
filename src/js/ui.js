@@ -24,7 +24,6 @@ const selectableDays = [
 function onBodyLoad() {
     initTranslator();
 
-    buildPriceInputTable();
     buildParameterInputTable()
 
     writeSettingsToInput(loadSettings());
@@ -39,7 +38,7 @@ function onChangeLanguageClick(language) {
 function onInlineCopyButtonClick() {
     const maxLength = 99;
 
-    const input = document.getElementById('inlineInput');
+    const input = inlineInputForm.inlineInput;
     if (input.value.trim().length <= 0) {
         return;
     }
@@ -50,17 +49,17 @@ function onInlineCopyButtonClick() {
     document.execCommand('copy');   
 }
 
-function onInlinePredictionButtonClick() {
+function onInlinePredictionSubmit() {
     const prices = readPricesFromInlineInput();
     if (!prices) {
-        return;
+        return false;
     }
-
     writePricesToInput(prices);
-    onPredictionButtonClick();
+
+    return onPredictionSubmit();
 }
 
-function onPredictionButtonClick() {
+function onPredictionSubmit() {
     saveSettings({
         tolerance: parseIntWithDefault(parameterInputForm.tolerance.value, 0),
         preset: parameterInputForm.parameterPreset.value,
@@ -72,6 +71,8 @@ function onPredictionButtonClick() {
 
     const result = predict(readParametersFromInput(), prices);
     displayResult(prices, result);
+
+    return false;
 }
 
 function onParameterInputToggleButtonClick() {
@@ -87,8 +88,8 @@ function onParameterPresetChange() {
     let selectedPresetKey = parameterInputForm.parameterPreset.value;
     writePresetParametersToInput(Presets.getPreset(selectedPresetKey));
 
-    document.getElementById('presetTip').style.display =
-            selectedPresetKey == 'acnh' ? 'block' : 'none';
+    let presetTip = document.getElementById('presetTip');
+    presetTip.innerText = selectedPresetKey == 'acnh' ? i18next.t('settings_preset_acnh_tip') : '';
 }
 
 function initTranslator() {
@@ -155,7 +156,7 @@ function writeSettingsToInput(settings) {
 }
 
 function readPricesFromInlineInput() {
-    let inlineInput = priceInputForm.inlineInput.value;
+    let inlineInput = inlineInputForm.inlineInput.value;
     inlineInput = inlineInput.replace(/^[^0-9]+|[^0-9]+$/g, '');
     inlineInput = inlineInput.replace(/[^0-9/]+|[\/]/g, ' ');
 
@@ -183,7 +184,7 @@ function writePricesToInlineInput(prices) {
     }
     inlinePrices = inlinePrices.replace(/[^0-9]+$/g, '');
 
-    priceInputForm.inlineInput.value = inlinePrices;
+    inlineInputForm.inlineInput.value = inlinePrices;
 }
 
 function readPricesFromInput() {
@@ -340,31 +341,6 @@ function writePresetParametersToInput(preset) {
     parameterInputForm.fourthPeriodPeak.checked = preset.fourthPeriod.hasFourthPeriodPeak;
 }
 
-function buildPriceInputTable() {
-    const tableBody = document.getElementById('priceInputTableBody');
-    const priceInputHtml = '<input type="number" name="price" class="price" '
-            + 'min="' + minInput + '" max="' + maxInput + '">';
-    const days = [
-        i18next.t('price_input_mon'),
-        i18next.t('price_input_tue'),
-        i18next.t('price_input_wed'),
-        i18next.t('price_input_thu'),
-        i18next.t('price_input_fri'),
-        i18next.t('price_input_sat'),
-    ];
-
-    for (let day of days) {
-        let insertedRow = tableBody.insertRow(-1);
-
-        let headerCell = document.createElement('th');
-        headerCell.innerText = day;
-        insertedRow.appendChild(headerCell)
-
-        let inputCell = insertedRow.insertCell(-1);
-        inputCell.innerHTML = priceInputHtml + '/' + priceInputHtml;
-    }
-}
-
 function buildParameterInputTable() {
     buildTransitionMethodInputs();
     buildTransitionAmountInputs();
@@ -412,7 +388,7 @@ function buildTransitionMethodInputs() {
 function buildTransitionAmountInputs() {
     const transitionAmountHtml = ''
             + '<input type="number" name="transitionMin" class="transitionAmount">'
-            + '~'
+            + ' ~ '
             + '<input type="number" name="transitionMax" class="transitionAmount">';
 
     for (let cell of document.getElementsByClassName('transitionAmountCell')) {
@@ -421,7 +397,6 @@ function buildTransitionAmountInputs() {
 }
 
 function buildTransitionDaysInputs() {
-    const transitionDayInputHtml = '<input type="checkbox" name="transitionDay">';
     const days = [
         i18next.t('settings_mon_am'),
         i18next.t('settings_mon_pm'),
@@ -437,11 +412,22 @@ function buildTransitionDaysInputs() {
         i18next.t('settings_sat_pm'),
     ];
 
+    let checkBoxOrder = 0;
     for (let cell of document.getElementsByClassName('transitionDaysCell')) {
         for (let day of days) {
+            const dayInput = document.createElement('input');
+            dayInput.type = 'checkbox';
+            dayInput.name = 'transitionDay';
+            dayInput.id = 'dayCheckBox' + checkBoxOrder;
+            cell.appendChild(dayInput);
+
             const dayLabel = document.createElement('label');
-            dayLabel.innerHTML = transitionDayInputHtml + day;
+            dayLabel.className = 'checkBoxLabel';
+            dayLabel.innerText = day;
+            dayLabel.htmlFor = dayInput.id;
             cell.appendChild(dayLabel);
+
+            checkBoxOrder++;
         }
     }
 }
@@ -604,8 +590,8 @@ function isBetween(value, min, max) {
 
 window.onBodyLoad = onBodyLoad;
 window.onInlineCopyButtonClick = onInlineCopyButtonClick;
-window.onInlinePredictionButtonClick = onInlinePredictionButtonClick;
-window.onPredictionButtonClick = onPredictionButtonClick;
+window.onInlinePredictionSubmit = onInlinePredictionSubmit;
+window.onPredictionSubmit = onPredictionSubmit;
 window.onParameterInputToggleButtonClick = onParameterInputToggleButtonClick;
 window.onParameterPresetChange = onParameterPresetChange;
 window.onChangeLanguageClick = onChangeLanguageClick;

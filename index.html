@@ -18,49 +18,109 @@
 <body onload="onBodyLoad();">
   <header>
     <h1>moothumb</h1>
-    <p data-i18n="[html]header_description">동물의 숲 무 주식으로 대박을 내서 대부호가 되어봅시다! 이 페이지는 <a href="http://tobikabu.web.fc2.com/">とびカブ(ver β1.0.2)</a>의 한국어 번역본입니다.</p>
     <p>
       <a href="javascript:onChangeLanguageClick('ko')">한국어</a>
       <a href="javascript:onChangeLanguageClick('en')">English</a>
       <a href="javascript:onChangeLanguageClick('zh-CN')">简体中文</a>
     </p>
+    <p data-i18n="[html]header_description">동물의 숲 무 주식으로 대박을 내서 대부호가 되어봅시다! 이 페이지는 <a href="http://tobikabu.web.fc2.com/">とびカブ(ver β1.0.2)</a>의 한국어 번역본입니다.</p>
     <noscript><p data-i18n="header_noscript">정상적으로 페이지를 표시하려면 JavaScript를 활성화해야 합니다.</p></noscript>
   </header>
 
-  <section id="content">
-    <section id="priceInput">
-      <h2 data-i18n="price_input_title">무 값 입력</h2>
-      <form name="priceInputForm">
-        <section>
-          <label for="inlineInput" data-i18n="price_input_inline">한 줄에 입력:</label><br />
-          <input type="text" id="inlineInput" name="inlineInput" maxlength="70">
-          <input type="button" value="복사" onClick="onInlineCopyButtonClick()" data-i18n="[value]price_input_inline_copy">
-          <input type="button" value="예측" onClick="onInlinePredictionButtonClick()" data-i18n="[value]price_input_predict">
-          <p class="tip" data-i18n="price_input_inline_example">예: 99 110/122 133/ 62/54 98/69 64</p>
-        </section>
-        <section>
-          <table>
-            <thead>
-              <tr>
-                <th></th>
-                <th data-i18n="price_input_am_pm">오전 / 오후</th>
-              </tr>
-            </thead>
-            <tbody id="priceInputTableBody">
-              <tr>
-                <th><label for="purchasePrice" data-i18n="price_input_purchase_price">구매가</label></th>
-                <td><input type="number" id="purchasePrice" name="price" class="price" min="0" max="2000"></td>
-              </tr>
-            </tbody>
-          </table>
-        </section>
-        <input type="button" value="예측" onClick="onPredictionButtonClick();" data-i18n="[value]price_input_predict">
-        <input type="reset" value="리셋" data-i18n="[value]price_input_reset">
-      </form>
-    </section>
+  <section id="priceInput" class="container">
+    <h2 data-i18n="price_input_title">무 값 입력</h2>
+    <form name="inlineInputForm" onsubmit="return onInlinePredictionSubmit();">
+      <label for="inlineInput" data-i18n="price_input_inline">한 줄에 입력:</label>
+      <div id="inlineInputContainer">
+        <input type="text" id="inlineInput" name="inlineInput" maxlength="70" placeholder="예: 99 110/122 133/ 62/54 98/69 64" data-i18n="[placeholder]price_input_inline_example">
+        <span>
+          <input type="button" value="복사" onClick="onInlineCopyButtonClick()" data-i18n="[value]price_input_inline_copy"><input type="submit" value="예측" data-i18n="[value]price_input_predict">
+        </span>
+      </div>
+    </form>
+    <hr />
+    <form name="priceInputForm" onsubmit="return onPredictionSubmit();">
+      <div>
+        <p>
+          <label for="purchasePrice" data-i18n="price_input_purchase_price">구매가:</label>
+          <input type="number" id="purchasePrice" name="price" class="price" min="0" max="2000">
+        </p>
+      </div>
+      <div id="priceInputContainer">
+        <div class="dailyPriceInputContainer">
+          <h3 data-i18n="price_input_mon">월요일</h3>
+          <p>
+            <span data-i18n="price_input_am">오전:</span>
+            <input type="number" name="price" class="price" min="0" max="2000">
+          </p>
+          <p>
+            <span data-i18n="price_input_pm">오후:</span>
+            <input type="number" name="price" class="price" min="0" max="2000">
+          </p>
+        </div>
+        <div class="dailyPriceInputContainer">
+          <h3 data-i18n="price_input_tue">화요일</h3>
+          <p>
+            <span data-i18n="price_input_am">오전:</span>
+            <input type="number" name="price" class="price" min="0" max="2000">
+          </p>
+          <p>
+            <span data-i18n="price_input_pm">오후:</span>
+            <input type="number" name="price" class="price" min="0" max="2000">
+          </p>
+        </div>
+        <div class="dailyPriceInputContainer">
+          <h3 data-i18n="price_input_wed">수요일</h3>
+          <p>
+            <span data-i18n="price_input_am">오전:</span>
+            <input type="number" name="price" class="price" min="0" max="2000">
+          </p>
+          <p>
+            <span data-i18n="price_input_pm">오후:</span>
+            <input type="number" name="price" class="price" min="0" max="2000">
+          </p>
+        </div>
+        <div class="dailyPriceInputContainer">
+          <h3 data-i18n="price_input_thu">목요일</h3>
+          <p>
+            <span data-i18n="price_input_am">오전:</span>
+            <input type="number" name="price" class="price" min="0" max="2000">
+          </p>
+          <p>
+            <span data-i18n="price_input_pm">오후:</span>
+            <input type="number" name="price" class="price" min="0" max="2000">
+          </p>
+        </div>
+        <div class="dailyPriceInputContainer">
+          <h3 data-i18n="price_input_fri">금요일</h3>
+          <p>
+            <span data-i18n="price_input_am">오전:</span>
+            <input type="number" name="price" class="price" min="0" max="2000">
+          </p>
+          <p>
+            <span data-i18n="price_input_pm">오후:</span>
+            <input type="number" name="price" class="price" min="0" max="2000">
+          </p>
+        </div>
+        <div class="dailyPriceInputContainer">
+          <h3 data-i18n="price_input_sat">토요일</h3>
+          <p>
+            <span data-i18n="price_input_am">오전:</span>
+            <input type="number" name="price" class="price" min="0" max="2000">
+          </p>
+          <p>
+            <span data-i18n="price_input_pm">오후:</span>
+            <input type="number" name="price" class="price" min="0" max="2000">
+          </p>
+        </div>
+      </div>
+      <input type="submit" value="예측" data-i18n="[value]price_input_predict"><input type="reset" value="리셋" data-i18n="[value]price_input_reset">
+    </form>
+  </section>
 
-    <section id="predictionResult">
-      <h2 data-i18n="result_title">예측 결과</h2>
+  <section id="predictionResult" class="container">
+    <h2 data-i18n="result_title">예측 결과</h2>
+    <div class="horizontalScroll">
       <table>
         <thead>
           <tr>
@@ -101,17 +161,19 @@
         </thead>
         <tbody id="predictionTableBody"></tbody>
       </table>
-    </section>
+    </div>
+  </section>
 
-    <section id="settings">
-      <h2 data-i18n="settings_title">설정</h2>
-      <form name="parameterInputForm">
-        <section>
-          <p>
-            <label for="tolerance" data-i18n="settings_tolerance">오차범위: ±</label>
-            <input type="text" size="3" name="tolerance" value="0">
-            <span data-i18n="settings_tolerance_unit_bell">벨</span>
-          </p>
+  <section id="settings" class="container">
+    <h2 data-i18n="settings_title">설정</h2>
+    <form name="parameterInputForm">
+      <section>
+        <p>
+          <label for="tolerance" data-i18n="settings_tolerance">오차범위: ±</label>
+          <input type="text" size="3" name="tolerance" value="0">
+          <span data-i18n="settings_tolerance_unit_bell">벨</span>
+        </p>
+        <p>
           <label for="parameterPreset" data-i18n="settings_preset">프리셋:</label>
           <select id="parameterPreset" name="parameterPreset" onchange="onParameterPresetChange()">
             <option value="acww" data-i18n="settings_preset_acww">놀러오세요 동물의 숲</option>
@@ -119,11 +181,14 @@
             <option value="acnl" data-i18n="settings_preset_acnl">튀어나와요 동물의 숲</option>
             <option value="acnh" data-i18n="settings_preset_acnh">모여봐요 동물의 숲</option>
           </select>
-          <p id="presetTip" class="tip" data-i18n="settings_preset_acnh_tip">이 프리셋은 시험 단계입니다. 예측이 잘못되었거나 없을 경우 입력한 가격에 대해 제보를 부탁드립니다.</p>
-        </section>
-        <section id="parameterInput">
-          <p data-i18n="settings_description">아래에서 세부 파라미터를 조정할 수 있습니다. 잘 모르겠다면 수정하지 마십시오.</p>
-          <input type="button" value="표시/숨기기" onClick="onParameterInputToggleButtonClick()" data-i18n="[value]settings_show_hide">
+        </p>
+        <p id="presetTip" data-i18n="settings_preset_acnh_tip">이 프리셋은 시험 단계입니다. 예측이 잘못되었거나 없을 경우 입력한 가격에 대해 제보를 부탁드립니다.</p>
+      </section>
+      <hr />
+      <section id="parameterInput">
+        <p data-i18n="settings_description">아래에서 세부 파라미터를 조정할 수 있습니다. 잘 모르겠다면 수정하지 마십시오.</p>
+        <input type="button" value="표시/숨기기" onClick="onParameterInputToggleButtonClick()" data-i18n="[value]settings_show_hide">
+        <div class="horizontalScroll">
           <table id="parameterInputTable">
             <thead>
               <tr>
@@ -292,17 +357,15 @@
               </tr>
               <tr>
                 <td colspan="4">
-                  <label>
-                    <input type="checkbox" name="fourthPeriodPeak">
-                    <span data-i18n="settings_fourth_period_peak">상승 4기에 최대</span>
-                  </label>
+                  <input type="checkbox" id="fourthPeriodPeak" name="fourthPeriodPeak">
+                  <label for="fourthPeriodPeak" class="checkBoxLabel" data-i18n="settings_fourth_period_peak">상승 4기에 최대</label>
                 </td>
               </tr>
             </tbody>
           </table>
-        </section>
-      </form>
-    </section>
+        </div>
+      </section>
+    </form>
   </section>
 
   <footer>
