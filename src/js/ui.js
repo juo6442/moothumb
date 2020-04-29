@@ -36,6 +36,20 @@ function onChangeLanguageClick(language) {
     location.reload();
 }
 
+function onInlineCopyButtonClick() {
+    const maxLength = 99;
+
+    const input = document.getElementById('inlineInput');
+    if (input.value.trim().length <= 0) {
+        return;
+    }
+
+    input.select(); 
+    input.setSelectionRange(0, maxLength);
+ 
+    document.execCommand('copy');   
+}
+
 function onInlinePredictionButtonClick() {
     const prices = readPricesFromInlineInput();
     if (!prices) {
@@ -589,6 +603,7 @@ function isBetween(value, min, max) {
 }
 
 window.onBodyLoad = onBodyLoad;
+window.onInlineCopyButtonClick = onInlineCopyButtonClick;
 window.onInlinePredictionButtonClick = onInlinePredictionButtonClick;
 window.onPredictionButtonClick = onPredictionButtonClick;
 window.onParameterInputToggleButtonClick = onParameterInputToggleButtonClick;
