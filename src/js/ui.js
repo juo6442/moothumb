@@ -6,6 +6,7 @@ import { locale } from './locale.js';
 import i18next from 'i18next';
 import locI18next from 'loc-i18next';
 import languageDetector from 'i18next-browser-languagedetector';
+import html2canvas from 'html2canvas';
 
 const defaultPreset = 'acnh';
 
@@ -76,6 +77,9 @@ function onPredictionSubmit() {
 }
 
 function onExportImageButtonClick() {
+    makeResultImage().then(image => {
+        saveImage(image);
+    });
 }
 
 function onParameterInputToggleButtonClick() {
@@ -580,6 +584,47 @@ function displayEmptyResult(tableBody) {
     cell.colSpan = 15;
     cell.innerText = i18next.t('result_empty');
     insertedRow.appendChild(cell);
+}
+
+async function makeResultImage() {
+    const resultElement = document.getElementById('resultTable');
+    const titleHeightPx = 80;
+    const additionalMarginBottomPx = 1;
+    const backgroundColor = '#EDE0BA';
+
+    window.scrollTo(0, 0);  // html2canvas limitation
+    const resultCanvas = await html2canvas(resultElement, {
+        backgroundColor: backgroundColor,
+    });
+
+    const outCanvas = document.createElement('canvas');
+    outCanvas.width = resultCanvas.width;
+    outCanvas.height = resultCanvas.height + titleHeightPx + additionalMarginBottomPx;
+    const ctx = outCanvas.getContext('2d');
+
+    // Background
+    ctx.fillStyle = backgroundColor;
+    ctx.fillRect(0, 0, outCanvas.width, outCanvas.height);
+
+    // Title
+    ctx.fillStyle = '#42332D';
+    ctx.font = 'bold 64px Arial, sans-serif';
+    ctx.fillText('moothumb', 10, 60);
+    ctx.fillStyle = 'gray';
+    ctx.font = '24px Arial, sans-serif';
+    ctx.fillText(window.location.hostname + window.location.pathname, 350, 60);
+
+    // Result
+    ctx.drawImage(resultCanvas, 0, titleHeightPx);
+
+    return outCanvas;
+}
+
+function saveImage(image) {
+    const link = document.createElement('a');
+    link.href = image.toDataURL('image/png');
+    link.download = 'moothumb_' + Date.now() + '.png';
+    link.click();
 }
 
 function parseIntWithDefault(string, defaultValue) {

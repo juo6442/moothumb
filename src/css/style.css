@@ -272,7 +272,7 @@ section#predictionResult td.realPrice {
 }
 
 section#predictionResult td.maxPrice {
-  background-color: #F68292;
+  background-color: rgba(246, 130, 146, 0.5);
 }
 
 /* Settings */
