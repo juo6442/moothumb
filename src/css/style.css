@@ -215,7 +215,7 @@ a.footerLink:active {
 #inlineInputContainer {
   display: flex;
   flex-flow: row wrap;
-  align-itrems: center;
+  align-items: center;
   margin: 0 -0.2rem -0.2rem -0.2rem;
 }
 
@@ -260,6 +260,10 @@ section#priceInput input[type=submit] {
 section#predictionResult {
   display: none;
   font-size: small;
+}
+
+section#predictionResult input[type=button] {
+  margin-bottom: 0.4rem;
 }
 
 section#predictionResult td.realPrice {

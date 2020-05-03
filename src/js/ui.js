@@ -75,6 +75,9 @@ function onPredictionSubmit() {
     return false;
 }
 
+function onExportImageButtonClick() {
+}
+
 function onParameterInputToggleButtonClick() {
     const parameterInputTable = document.getElementById('parameterInputTable');
     if (parameterInputTable.style.display == 'block') {
@@ -592,6 +595,7 @@ window.onBodyLoad = onBodyLoad;
 window.onInlineCopyButtonClick = onInlineCopyButtonClick;
 window.onInlinePredictionSubmit = onInlinePredictionSubmit;
 window.onPredictionSubmit = onPredictionSubmit;
+window.onExportImageButtonClick = onExportImageButtonClick;
 window.onParameterInputToggleButtonClick = onParameterInputToggleButtonClick;
 window.onParameterPresetChange = onParameterPresetChange;
 window.onChangeLanguageClick = onChangeLanguageClick;
