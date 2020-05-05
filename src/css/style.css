@@ -130,7 +130,7 @@ select::-ms-expand {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  user-select: none; 
+  user-select: none;
 }
 
 input[type=checkbox]:checked + .checkBoxLabel {
@@ -219,7 +219,7 @@ a.footerLink:active {
 #inlineInputContainer {
   display: flex;
   flex-flow: row wrap;
-  align-itrems: center;
+  align-items: center;
   margin: 0 -0.2rem -0.2rem -0.2rem;
 }
 
@@ -230,7 +230,7 @@ a.footerLink:active {
 
 input#inlineInput {
   flex-grow: 1;
-  margin: 0.2rem; 
+  margin: 0.2rem;
 }
 
 /* Price Input */
