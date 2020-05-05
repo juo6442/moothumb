@@ -71,6 +71,8 @@ select,
   color: #7D7258;
   font-size: medium;
   vertical-align: middle;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 input[type=button],
