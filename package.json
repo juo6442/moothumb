@@ -30,6 +30,7 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
-    "core-js": "^3.6.4"
+    "core-js": "^3.6.4",
+    "html2canvas": "^1.0.0-rc.5"
   }
 }
