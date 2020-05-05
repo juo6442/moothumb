@@ -71,6 +71,8 @@ select,
   color: #7D7258;
   font-size: medium;
   vertical-align: middle;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 input[type=button],
@@ -94,6 +96,8 @@ input[type=reset]:active,
 input[type=checkbox] {
   width: 0;
   height: 0;
+  padding: 0;
+  margin: 0;
   opacity: 0;
 }
 
@@ -126,7 +130,7 @@ select::-ms-expand {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  user-select: none; 
+  user-select: none;
 }
 
 input[type=checkbox]:checked + .checkBoxLabel {
@@ -226,7 +230,7 @@ a.footerLink:active {
 
 input#inlineInput {
   flex-grow: 1;
-  margin: 0.2rem; 
+  margin: 0.2rem;
 }
 
 /* Price Input */
