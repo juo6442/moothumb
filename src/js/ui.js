@@ -559,8 +559,8 @@ function displayResultRow(typeName, detailedType, result, tableBody) {
     let maxPriceCells;
     for (let i = 0; i < result.length; i++) {
         const priceCell = insertedRow.insertCell(-1);
-        const min = Math.floor(result[i].min);
-        const max = Math.ceil(result[i].max);
+        const min = result[i].min;
+        const max = result[i].max;
 
         priceCell.innerText = (min == max ? min : min + '~' + max);
 
