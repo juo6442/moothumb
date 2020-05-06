@@ -39,8 +39,30 @@ const TransitionMethod = {
 
 class PredictionRange {
     constructor(min, max, tolerance=this.tolerance) {
-        this.min = min - tolerance;
-        this.max = max + tolerance;
+        this._min = min - tolerance;
+        this._max = max + tolerance;
+    }
+
+    get min() {
+        return this._min;
+    }
+
+    /**
+     * @param {number} value
+     */
+    set min(value) {
+        this._min = Math.floor(value);
+    }
+
+    get max() {
+        return this._max;
+    }
+
+    /**
+     * @param {number} value
+     */
+    set max(value) {
+        this._max = Math.ceil(value);
     }
 
     toString() {
