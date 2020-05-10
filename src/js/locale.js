@@ -2,6 +2,7 @@ export const locale = {
     ko: {
         translation: {
             'title': 'moothumb - 동물의 숲 무 가격 예측기',
+            'header_deprecated': '⚠️ 이 페이지는 더 이상 유지보수되고 있지 않습니다! 더 좋은 솔루션을 이용합시다: https://ac-turnip.com/',
             'header_description': '동물의 숲 무 주식으로 대박을 내서 대부호가 되어봅시다! 이 페이지는 <a href="http://tobikabu.web.fc2.com/">とびカブ(ver β1.0.2)</a>의 번역본입니다.',
             'header_noscript': '정상적으로 페이지를 표시하려면 JavaScript를 활성화해야 합니다.',
             'price_input_title': '무 값 입력',
@@ -116,6 +117,7 @@ export const locale = {
     en: {
         translation: {
             'title': 'moothumb - Turnip price predictor for Animal Crossing',
+            'header_deprecated': '⚠️ This page is not maintained anymore! Please use the better solution: https://ac-turnip.com/',
             'header_description': 'Let\'s become a millionaire with turnip investment in Animal Crossing! This page is a translation of <a href="http://tobikabu.web.fc2.com/">とびカブ(ver β1.0.2)</a>.',
             'header_noscript': 'You need to enable JavaScript to use the site.',
             'price_input_title': 'Price Input',
