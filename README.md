@@ -1,6 +1,8 @@
+> ⚠️ **This project is not maintained anymore! Please use the better solution: https://ac-turnip.com/**
+
 # moothumb
 
-https://juo6442.github.io/moothumb/
+~~https://juo6442.github.io/moothumb/~~
 
 ## Introduction
 
